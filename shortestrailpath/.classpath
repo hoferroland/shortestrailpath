@@ -22,5 +22,18 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/Roli/Desktop/Tmp/jdom-2.0.5.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Roli/Desktop/Tmp/jdom-2.0.5-sources.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Roli/Desktop/Tmp/jdom-2.0.5-junit.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Roli/Desktop/Tmp/jdom-2.0.5-javadoc.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Roli/Desktop/Tmp/jdom-2.0.5-contrib.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Roli/Desktop/Tmp/lib/jaxen-1.1.6.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Roli/Desktop/Tmp/lib/xercesImpl.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Roli/Desktop/Tmp/lib/xml-apis.jar"/>
+	<classpathentry excluding="**" kind="src" output="target/classes" path="src/main/resources">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
