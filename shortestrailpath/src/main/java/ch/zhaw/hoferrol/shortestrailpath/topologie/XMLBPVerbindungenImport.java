@@ -68,13 +68,18 @@ public class XMLBPVerbindungenImport {
 					System.out.println(col2.getAttributeValue("NAME") + ": "
 							+ col2.getValue());
 				}
-				Long bpVon = Long.valueOf(columns2.get(2).getText());
-				Long bpBis = Long.valueOf(columns2.get(3).getText());
+				Long bpVon = Long.valueOf(columns2.get(1).getText());
+				Long bpBis = Long.valueOf(columns2.get(2).getText());
+				Long distanz = Long.valueOf(columns2.get(3).getText());
+				int anzGl = Integer.parseInt(columns2.get(4).getText());
 
 				Long id = Long.valueOf(columns2.get(0).getText());
 				// .getAttributeValue("ID_BETRIEBSPUNKT"));
 				BetriebspunktVerbindungen bpVerb = new BetriebspunktVerbindungen(
-						id, bpVon, bpBis, 1, 1);
+						id, bpVon, bpBis, distanz, anzGl);
+				// Konsolenausgbe zu Debugzwecken
+				// System.out.println(id + ", " + bpVon + ", " + bpBis + ", "
+				// + distanz + ", " + anzGl);
 				bpVerbList.add(bpVerb);
 
 				//
