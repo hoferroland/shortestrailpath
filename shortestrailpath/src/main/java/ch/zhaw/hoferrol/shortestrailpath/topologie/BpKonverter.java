@@ -31,4 +31,12 @@ public class BpKonverter {
 
 	}
 
+	public Map<Long, Betriebspunkt> getHashBp() {
+		return hashBp;
+	}
+
+	public Betriebspunkt getBp(long id) {
+		return hashBp.get(id);
+	}
+
 }

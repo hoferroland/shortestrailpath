@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -17,7 +18,7 @@ public class XMLBPVerbindungenImport {
 
 	// public static void main(String[] args) {
 
-	public static void xmlBpVerbindungImport() {
+	public static void xmlBpVerbindungImport(Map<Long, Betriebspunkt> hashBp) {
 
 		Document doc = null;
 		List alleKinder;
@@ -70,13 +71,14 @@ public class XMLBPVerbindungenImport {
 				}
 				Long bpVon = Long.valueOf(columns2.get(1).getText());
 				Long bpBis = Long.valueOf(columns2.get(2).getText());
+				Betriebspunkt bpStart = hashBp.get(bpVon);
+				Betriebspunkt bpZiel = hashBp.get(bpBis);
 				Long distanz = Long.valueOf(columns2.get(3).getText());
 				int anzGl = Integer.parseInt(columns2.get(4).getText());
-
 				Long id = Long.valueOf(columns2.get(0).getText());
 				// .getAttributeValue("ID_BETRIEBSPUNKT"));
 				BetriebspunktVerbindungen bpVerb = new BetriebspunktVerbindungen(
-						id, bpVon, bpBis, distanz, anzGl);
+						id, bpVon, bpBis, distanz, anzGl, bpStart, bpZiel);
 				// Konsolenausgbe zu Debugzwecken
 				// System.out.println(id + ", " + bpVon + ", " + bpBis + ", "
 				// + distanz + ", " + anzGl);

@@ -28,4 +28,9 @@ public class BpVerbKonverter {
 				+ hashBpVerb.size());
 
 	}
+
+	public Map<Long, BetriebspunktVerbindungen> getHashBpVerb() {
+		return hashBpVerb;
+	}
+
 }
