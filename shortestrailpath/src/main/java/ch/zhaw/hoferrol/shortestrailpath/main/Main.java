@@ -57,11 +57,11 @@ public class Main {
 
 		// Betriebspunkt startBp = hashBp.get(182L);
 
-		BpHelper startHelper = helperMap.get(167L); // Murgenthal
-		// BpHelper startHelper = helperMap.get(182L); // Olten
-		BpHelper zielHelper = helperMap.get(182L); // Olten
+		// BpHelper startHelper = helperMap.get(167L); // Murgenthal
+		BpHelper startHelper = helperMap.get(182L); // Olten
+		// BpHelper zielHelper = helperMap.get(182L); // Olten
 		// BpHelper zielHelper = helperMap.get(241L); // Trimbach
-		// BpHelper zielHelper = helperMap.get(406L); // Winti
+		BpHelper zielHelper = helperMap.get(406L); // Winti
 		// startHelper =
 
 		dijkstra.work(hashBpVerb, startHelper, helperMap);
