@@ -1,6 +1,5 @@
 package ch.zhaw.hoferrol.shortestrailpath.topologie;
 
-
 public class Betriebspunkt {
 
 	String abkuerzung;
@@ -48,6 +47,10 @@ public class Betriebspunkt {
 
 	public float getKoo_y() {
 		return koo_y;
+	}
+
+	public String toString() {
+		return this.bezeichnung;
 	}
 
 	// public void setNextBp(Betriebspunkt next) {

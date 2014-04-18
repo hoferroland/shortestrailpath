@@ -57,6 +57,9 @@ public class XMLBetriebspunkteImport {
 			// }
 			// Iteration über alle Attribute
 			int i;
+			Float xKoo = null;
+			Float yKoo = null;
+			int bpTyp;
 			for (i = 0; i < alleKinder.size(); i++) {
 				Element kind2 = ((Element) alleKinder.get(i));
 				List<Element> columns1 = kind2.getChildren();
@@ -66,11 +69,27 @@ public class XMLBetriebspunkteImport {
 				}
 				String abkuerzung = columns1.get(2).getText();
 				String name = columns1.get(3).getText();
+				if ((columns1.get(1).getText()) != "") {
+					bpTyp = Integer.parseInt(columns1.get(1).getText());
+				} else {
+					bpTyp = 9;
+				}
 
 				Long idBP = Long.valueOf(columns1.get(0).getText());
+				if ((columns1.get(4).getText()) != "") {
+					xKoo = Float.parseFloat(columns1.get(4).getText());
+				} else {
+					xKoo = 1.1f;
+				}
+
+				if ((columns1.get(5).getText()) != "") {
+					yKoo = Float.parseFloat(columns1.get(5).getText());
+				} else {
+					yKoo = 1.1f;
+				}
 				// .getAttributeValue("ID_BETRIEBSPUNKT"));
-				Betriebspunkt bp = new Betriebspunkt(abkuerzung, name, idBP, 1,
-						1.1f, 2.1f);
+				Betriebspunkt bp = new Betriebspunkt(abkuerzung, name, idBP,
+						bpTyp, xKoo, yKoo);
 				bpList.add(bp);
 
 				//
