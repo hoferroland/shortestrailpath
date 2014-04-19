@@ -47,6 +47,10 @@ public class BpHelper {
 		this.vorher = vorher;
 	}
 
+	public Betriebspunkt getBp() {
+		return bp;
+	}
+
 	public Betriebspunkt getBpVorher() {
 		return vorher;
 	}
@@ -84,7 +88,7 @@ public class BpHelper {
 		Map<Long, BpHelper> bpHelperMap = new HashMap<Long, BpHelper>();
 
 		// Iterieren über die bpMap
-		Iterator it = bpMap.keySet().iterator();
+		Iterator<Long> it = bpMap.keySet().iterator();
 
 		while (it.hasNext()) {
 			Object key = it.next();

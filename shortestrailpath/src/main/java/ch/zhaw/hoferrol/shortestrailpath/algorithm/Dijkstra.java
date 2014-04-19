@@ -107,7 +107,7 @@ public class Dijkstra {
 			BpHelper bpHelperStart, Map<Long, BpHelper> allBpMap) {
 
 		// BpHelper werden vorbereitet. Dazu wird über allBpMap iteriert
-		Iterator iter = allBpMap.keySet().iterator();
+		Iterator<Long> iter = allBpMap.keySet().iterator();
 		while (iter.hasNext()) {
 			Object key = (Object) iter.next();
 			BpHelper helper = (BpHelper) allBpMap.get(key);
@@ -327,7 +327,7 @@ public class Dijkstra {
 
 		// Ausgabe auf Konsole von BpHelpern welche keinen Vorgänger haben
 		// (Test und Debug)
-		Iterator iterator = allBpMap.keySet().iterator();
+		Iterator<Long> iterator = allBpMap.keySet().iterator();
 		while (iterator.hasNext()) {
 			Object key = (Object) iterator.next();
 			BpHelper helperVorg = (BpHelper) allBpMap.get(key);
@@ -389,6 +389,7 @@ public class Dijkstra {
 					+ bpHelper.bp.getAbkuerzung() + ", "
 					+ bpHelper.bp.getBezeichnung());
 		}
+
 		return shortestPath;
 	}
 }

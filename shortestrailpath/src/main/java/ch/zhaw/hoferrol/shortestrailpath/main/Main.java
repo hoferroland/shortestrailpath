@@ -6,7 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import ch.zhaw.hoferrol.shortestrailpath.algorithm.BpHelper;
-import ch.zhaw.hoferrol.shortestrailpath.algorithm.Dijkstra;
+import ch.zhaw.hoferrol.shortestrailpath.gui.GuiMainHandler;
+import ch.zhaw.hoferrol.shortestrailpath.gui.IGuiMainHandler;
 import ch.zhaw.hoferrol.shortestrailpath.topologie.Betriebspunkt;
 import ch.zhaw.hoferrol.shortestrailpath.topologie.BetriebspunktVerbindungen;
 import ch.zhaw.hoferrol.shortestrailpath.topologie.BpKonverter;
@@ -22,6 +23,9 @@ public class Main {
 	static Map<Long, BetriebspunktVerbindungen> hashBpVerb = new HashMap<Long, BetriebspunktVerbindungen>();
 	static BpHelper startHelper;
 	static BpHelper zielHelper;
+	private static Map<Long, BpHelper> helperMap = new HashMap<Long, BpHelper>();
+
+	private static List<BpHelper> shortestPath = new ArrayList<BpHelper>();
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -42,14 +46,19 @@ public class Main {
 		bpVerbKonv.convertBpVerb(bpVerbList);
 		hashBpVerb = bpVerbKonv.getHashBpVerb();
 
+		// GUI-Aufruf
+
 		// Dijkstra
 		// BpHelper.buildHelperList(hashBp, hashBpVerb);
 		BpHelper.buildHelperMap(hashBp, hashBpVerb);
 		// BpHelper.buildHelperList(hashBp, hashBpVerb);
 
-		Map<Long, BpHelper> helperMap = BpHelper.buildHelperMap(hashBp,
-				hashBpVerb);
-		Dijkstra dijkstra = new Dijkstra(helperMap);
+		helperMap = BpHelper.buildHelperMap(hashBp, hashBpVerb);
+
+		IGuiMainHandler guiMainHandler = new GuiMainHandler(hashBp, hashBpVerb,
+				helperMap);
+
+		// Dijkstra dijkstra = new Dijkstra(helperMap);
 		// Dijkstra dijkstra = new Dijkstra(BpHelper.buildHelperList(hashBp,
 		// hashBpVerb));
 
@@ -58,20 +67,20 @@ public class Main {
 		// Betriebspunkt startBp = hashBp.get(182L);
 
 		// BpHelper startHelper = helperMap.get(167L); // Murgenthal
-		BpHelper startHelper = helperMap.get(182L); // Olten
+		// BpHelper startHelper = helperMap.get(182L); // Olten
 		// BpHelper zielHelper = helperMap.get(182L); // Olten
 		// BpHelper zielHelper = helperMap.get(241L); // Trimbach
-		BpHelper zielHelper = helperMap.get(406L); // Winti
-		// startHelper =
+		// BpHelper zielHelper = helperMap.get(406L); // Winti
 
-		dijkstra.work(hashBpVerb, startHelper, helperMap);
+		// dijkstra.work(hashBpVerb, startHelper, helperMap);
 
 		// dijkstra.work(hashBpVerb, startHelper,
 		// BpHelper.buildHelperList(hashBp, hashBpVerb));
 		// Ausgabe des kürzesten Weges zwischen Olten (id_bp 182) und
 		// Winterthur (id_bp 406)
-		System.out.println("Vorgänger Winterthur: " + zielHelper.getBpVorher());
-		dijkstra.getShortestPath(startHelper, zielHelper);
+		// shortestPath = dijkstra.getShortestPath(startHelper, zielHelper);
+		// guiMainHandler.getResult(shortestPath);
+
 	}
 
 }
