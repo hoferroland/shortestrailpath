@@ -8,6 +8,7 @@ public class Betriebspunkt {
 	int betriebspunkt_typ;
 	float koo_x;
 	float koo_y;
+	int uic;
 
 	// List<Betriebspunkt> nextBp = new ArrayList<Betriebspunkt>();
 	// BpHelper vorher;
@@ -15,13 +16,14 @@ public class Betriebspunkt {
 	// BpStatusEnum status;
 
 	public Betriebspunkt(String abk, String bez, long id_bp, int bp_typ,
-			float xPos, float yPos) {
+			float xPos, float yPos, int uic) {
 		abkuerzung = abk;
 		bezeichnung = bez;
 		id_betriebspunkt = id_bp;
 		this.betriebspunkt_typ = bp_typ;
 		koo_x = xPos;
 		koo_y = yPos;
+		this.uic = uic;
 	}
 
 	// Getter-Methoden
@@ -51,6 +53,10 @@ public class Betriebspunkt {
 
 	public String toString() {
 		return this.bezeichnung;
+	}
+
+	public int getUic() {
+		return uic;
 	}
 
 	// public void setNextBp(Betriebspunkt next) {

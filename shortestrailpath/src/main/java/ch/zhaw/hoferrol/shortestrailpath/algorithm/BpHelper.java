@@ -20,6 +20,8 @@ public class BpHelper {
 	long distanzZumStart;
 	BpStatusEnum status;
 	BpHelper bpHelper;
+	float iKoo;
+	float jKoo;
 
 	// Konstruktor für einen BpHelper
 	public BpHelper(Betriebspunkt bp) {
@@ -69,6 +71,22 @@ public class BpHelper {
 
 	public void setStatus(BpStatusEnum status) {
 		this.status = status;
+	}
+
+	public void setIKoo(float iKoo) {
+		this.iKoo = iKoo;
+	}
+
+	public float getIKoo() {
+		return iKoo;
+	}
+
+	public void setJKoo(float jKoo) {
+		this.jKoo = jKoo;
+	}
+
+	public float getJKoo() {
+		return jKoo;
 	}
 
 	// Methode, welche aus der Map Betriebspunkt und der Map

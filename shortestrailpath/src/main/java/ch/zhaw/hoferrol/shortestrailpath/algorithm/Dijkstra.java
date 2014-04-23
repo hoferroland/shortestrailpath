@@ -172,8 +172,8 @@ public class Dijkstra {
 					// auf
 					// Konsole
 					// (Test und Debug)
-					// System.out.println("Distanz vom Start zum nächsten Bp "
-					// + distanzBpHelperStartToNext);
+					System.out.println("Distanz vom Start zum nächsten Bp "
+							+ distanzBpHelperStartToNext);
 
 					// Setze Distanz zum nächsten Betriebsknoten
 					nextHelper = allBpMap.get(next.getId_betriebspunkt());
@@ -210,8 +210,10 @@ public class Dijkstra {
 			// Ausgabe des nextBp (neuen AusgangsBpHelper für den nächsten
 			// Schleifendurchlauf) auf Konsole
 			// (Test und Debug)
-			// System.out.println("Roter BpHelper mit kleinster Distanz: " +
-			// nextBp);
+			System.out.println("-----------------------------------------");
+			System.out.println("Roter BpHelper mit kleinster Distanz: "
+					+ nextBp.getBp().getBezeichnung() + ", ("
+					+ nextBp.getBp().getAbkuerzung() + ")");
 
 			// Wechsle den neuen AusgangsBpHelper (nextBp) zu grün
 			changeBpToGreen(nextBp);
@@ -240,8 +242,8 @@ public class Dijkstra {
 
 				// Ausgabe des neuen 'next2'Betriebspunktes auf Konsole
 				// (Test und Debug)
-				// System.out.println("Nächster Betriebspunkt: "
-				// + next2Helper.bp.getAbkuerzung());
+				System.out.println("Nächster Betriebspunkt: "
+						+ next2Helper.bp.getAbkuerzung());
 
 				// berechne Distanz zwischen 'next2' und 'nextBp'
 				long distanzBpHelperVonZu = NeighbourCalculator.getDistanz(
@@ -251,7 +253,7 @@ public class Dijkstra {
 				// Ausgabe der eruierten Distanz zwischen 'next2' und 'nextBp'
 				// auf Konsole
 				// (Test und Debug)
-				// System.out.println("Distanz: " + distanzBpHelperVonZu);
+				System.out.println("Distanz: " + distanzBpHelperVonZu);
 
 				// Addiere neu eruierte Distanz zu bereits bestehender Distanz
 				// vom 'start'BpHelper zum 'nextBp'-BpHelper.
@@ -261,9 +263,9 @@ public class Dijkstra {
 				// berechnete Distanz
 				// grösser dem max-Wert ist
 				// (Test und Debug)
-				// if (tmpDistanz >= Integer.MAX_VALUE) {
-				// System.out.println("Achtung hier stimmt was nicht!");
-				// }
+				if (tmpDistanz >= Integer.MAX_VALUE) {
+					System.out.println("Achtung hier stimmt was nicht!");
+				}
 
 				// Falls die neu berechnete Distanz (tmpDistanz) kleiner ist
 				// als die next2-Distanz, setze die neue Distanz und den

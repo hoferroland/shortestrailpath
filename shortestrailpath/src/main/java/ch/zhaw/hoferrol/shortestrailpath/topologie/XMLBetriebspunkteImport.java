@@ -1,10 +1,11 @@
 package ch.zhaw.hoferrol.shortestrailpath.topologie;
 
-import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -13,22 +14,41 @@ import org.jdom2.output.XMLOutputter;
 
 public class XMLBetriebspunkteImport {
 
-	static List<Betriebspunkt> bpList = new ArrayList<Betriebspunkt>();
+	private static final Logger LOG = Logger
+			.getLogger(XMLBetriebspunkteImport.class);
+
+	private final URL importUrl;
+
+	public XMLBetriebspunkteImport(URL url) {
+		LOG.info("BP Import initialisiert mit URL " + url);
+		importUrl = url;
+	}
 
 	// public static void main(String[] args) {
-	public static void xmlBpImport() {
+	public List<Betriebspunkt> xmlBpImport() {
+
+		List<Betriebspunkt> bpList = new ArrayList<Betriebspunkt>();
 
 		Document doc = null;
-		List alleKinder;
+		List<Element> alleKinder;
 
 		// String fileName = System.getProperty("bpFile");
 		// File f = new File("d:\\uno_betriebspunkt.xml");
-		File f = new File("betriebspunkte.xml");
+
+		// File f = new File(DEFAULT_BP_FILE_NAME);
+		// URL fileUrl = f.toURI().toURL();
+		//
+		// if (!f.canRead()) {
+		// throw new IllegalArgumentException("datei " + DEFAULT_BP_FILE_NAME
+		// + " zum einlesen der betriebspunkte wurde nicht gefunden!");
+		// }
+		//
+		// URL url = this.getClass().getResource("/" + DEFAULT_BP_FILE_NAME);
 
 		try {
 			// Das Dokument erstellen
 			SAXBuilder builder = new SAXBuilder();
-			doc = builder.build(f);
+			doc = builder.build(importUrl);
 			XMLOutputter fmt = new XMLOutputter();
 
 			// komplettes Dokument ausgeben
@@ -42,7 +62,7 @@ public class XMLBetriebspunkteImport {
 			// System.out.println("Wurzelelementname: " + element.getName());
 
 			// Eine Liste aller direkten Kindelemente eines Elementes erstellen
-			alleKinder = (List) element.getChildren();
+			alleKinder = element.getChildren();
 			// System.out.println("Erstes Kindelement: "
 			// + ((Element) alleKinder.get(0)).getName());
 			// System.out.println("Liste aller Kinder: " + alleKinder.size());
@@ -60,11 +80,12 @@ public class XMLBetriebspunkteImport {
 			Float xKoo = null;
 			Float yKoo = null;
 			int bpTyp;
+			int uic = 80;
 			for (i = 0; i < alleKinder.size(); i++) {
 				Element kind2 = ((Element) alleKinder.get(i));
 				List<Element> columns1 = kind2.getChildren();
 				for (Element col : columns1) {
-					System.out.println(col.getAttributeValue("NAME") + ": "
+					LOG.debug(col.getAttributeValue("NAME") + ": "
 							+ col.getValue());
 				}
 				String abkuerzung = columns1.get(2).getText();
@@ -87,14 +108,20 @@ public class XMLBetriebspunkteImport {
 				} else {
 					yKoo = 1.1f;
 				}
+				if ((columns1.get(6).getText()) != "") {
+					uic = Integer.parseInt(columns1.get(6).getText());
+				} else {
+					uic = 80;
+				}
+
 				// .getAttributeValue("ID_BETRIEBSPUNKT"));
 				Betriebspunkt bp = new Betriebspunkt(abkuerzung, name, idBP,
-						bpTyp, xKoo, yKoo);
+						bpTyp, xKoo, yKoo, uic);
 				bpList.add(bp);
 
 				//
-				System.out.println("size: " + bpList.size());
-				System.out.println("----------");
+				LOG.debug("size: " + bpList.size());
+				LOG.debug("----------");
 			}
 
 		} catch (JDOMException e) {
@@ -102,11 +129,8 @@ public class XMLBetriebspunkteImport {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
 
-	public static List<Betriebspunkt> getBpList() {
 		return bpList;
-
 	}
 
 }

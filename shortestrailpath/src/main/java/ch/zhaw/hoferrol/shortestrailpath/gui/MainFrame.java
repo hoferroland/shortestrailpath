@@ -3,6 +3,7 @@ package ch.zhaw.hoferrol.shortestrailpath.gui;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -18,10 +20,13 @@ import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+
+import ch.zhaw.hoferrol.shortestrailpath.algorithm.BpHelper;
 
 public class MainFrame extends JFrame { // implements ActionListener,
 										// ItemListener {
@@ -30,7 +35,15 @@ public class MainFrame extends JFrame { // implements ActionListener,
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private JPanel contentPane;
+	private static JPanel contentPane;
+	private static JPanel contentPaneLeft;
+	private static JPanel contentPaneRight;
+	private static JPanel contentPaneLeftTop;
+	private static JPanel contentPaneLeftStart;
+	private static JPanel contentPaneLeftZiel;
+	private static JPanel contentPaneLeftModus;
+	private static JPanel contentPaneLeftButton;
+	private static JLabel resultDistanz;
 	List<Row> bhfRows = new ArrayList<Row>();
 	private static JTable resultTable;
 	private static String[] resultTableColumnNames;
@@ -40,6 +53,8 @@ public class MainFrame extends JFrame { // implements ActionListener,
 	private Row zielRow = null;
 	private JComboBox<Row> cbo_startHelper = new JComboBox<Row>();
 	private JComboBox<Row> cbo_zielHelper = new JComboBox<Row>();
+
+	// private List<BpHelper> shortestPath = new ArrayList<BpHelper>();
 
 	/**
 	 * Launch the application.
@@ -60,19 +75,18 @@ public class MainFrame extends JFrame { // implements ActionListener,
 	/**
 	 * Create the frame.
 	 */
-	public MainFrame(List<Row> bhfRows) {
+	public MainFrame(List<Row> bhfRows, List<BpHelper> shortestPath) {
+		// public MainFrame(List<Row> bhfRows) {
 
 		this.bhfRows = bhfRows;
+		// this.shortestPath = shortestPath;
 
 		setTitle("shortestRailPath - Navigator");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 800, 470);
+		setBounds(100, 100, 950, 540);
 
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
-
-		JMenuBar menuBar_1 = new JMenuBar();
-		menuBar.add(menuBar_1);
 
 		JMenuItem mntmDatei = new JMenuItem("Datei");
 		menuBar.add(mntmDatei);
@@ -85,7 +99,59 @@ public class MainFrame extends JFrame { // implements ActionListener,
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		contentPane.setLayout(null);
+
+		contentPane.setLayout(new GridLayout(0, 2));
+		contentPaneLeft = new JPanel();
+		contentPaneLeft.setBorder(new EmptyBorder(5, 15, 20, 5));
+		contentPaneLeft.setLayout(new BoxLayout(contentPaneLeft,
+				BoxLayout.Y_AXIS));
+		contentPaneRight = new JPanel();
+		contentPane.add(contentPaneLeft);
+		contentPane.add(contentPaneRight);
+
+		contentPaneLeftTop = new JPanel();
+
+		contentPaneLeftStart = new JPanel();
+		// BoxLayout boxLayoutTop = new BoxLayout(contentPaneLeftTop,
+		// BoxLayout.Y_AXIS);
+		// BoxLayout boxLayoutStart = new BoxLayout(contentPaneLeftStart,
+		// BoxLayout.Y_AXIS);
+		// BoxLayout boxLayoutZiel = new BoxLayout(contentPaneLeftZiel,
+		// BoxLayout.Y_AXIS);
+
+		// contentPaneLeftTop.setLayout(new BoxLayout(contentPaneLeftTop,
+		// BoxLayout.Y_AXIS));
+		// contentPaneLeftStart.setLayout(new BoxLayout(contentPaneLeftStart,
+		// BoxLayout.X_AXIS));
+		// contentPaneLeftZiel = new JPanel();
+		// contentPaneLeftZiel.setLayout(new BoxLayout(contentPaneLeftZiel,
+		// BoxLayout.X_AXIS));
+		// contentPaneLeftModus = new JPanel();
+		// contentPaneLeftModus.setLayout(new BoxLayout(contentPaneLeftModus,
+		// BoxLayout.X_AXIS));
+		// contentPaneLeftButton = new JPanel();
+		// contentPaneLeftButton.setLayout(new BoxLayout(contentPaneLeftButton,
+		// BoxLayout.X_AXIS));
+
+		contentPaneLeftTop.setLayout(new GridLayout(3, 2));
+		contentPaneLeftStart.setLayout(new GridLayout(3, 2));
+		contentPaneLeftZiel = new JPanel();
+		contentPaneLeftZiel.setLayout(new GridLayout(3, 2));
+		contentPaneLeftModus = new JPanel();
+		contentPaneLeftModus.setLayout(new GridLayout(3, 2));
+		contentPaneLeftButton = new JPanel();
+		contentPaneLeftButton.setLayout(new GridLayout(3, 2));
+
+		contentPaneLeft.add(contentPaneLeftTop);
+		contentPaneLeft.add(contentPaneLeftStart);
+		contentPaneLeft.add(contentPaneLeftZiel);
+		contentPaneLeft.add(contentPaneLeftModus);
+		contentPaneLeft.add(contentPaneLeftButton);
+
+		JLabel lblStartHelper = new JLabel("Ausgangsbahnhof:");
+		lblStartHelper.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblStartHelper.setBounds(10, 47, 238, 21);
+		contentPaneLeftStart.add(lblStartHelper);
 
 		cbo_startHelper.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
@@ -113,17 +179,12 @@ public class MainFrame extends JFrame { // implements ActionListener,
 		// cbo_startHelper.addActionListener(actionListener);
 
 		cbo_startHelper.setBounds(10, 79, 238, 29);
-		contentPane.add(cbo_startHelper);
-
-		JLabel lblStartHelper = new JLabel("Ausgangsbahnhof:");
-		lblStartHelper.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		lblStartHelper.setBounds(10, 47, 238, 21);
-		contentPane.add(lblStartHelper);
+		contentPaneLeftStart.add(cbo_startHelper);
 
 		JLabel lblZielHelper = new JLabel("Zielbahnhof:");
-		lblZielHelper.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		lblZielHelper.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblZielHelper.setBounds(10, 149, 238, 21);
-		contentPane.add(lblZielHelper);
+		contentPaneLeftZiel.add(lblZielHelper);
 
 		cbo_zielHelper.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
@@ -134,24 +195,24 @@ public class MainFrame extends JFrame { // implements ActionListener,
 			}
 		});
 		cbo_zielHelper.setBounds(10, 181, 238, 29);
-		contentPane.add(cbo_zielHelper);
+		contentPaneLeftZiel.add(cbo_zielHelper);
 
 		Component verticalStrut = Box.createVerticalStrut(20);
 		verticalStrut.setBounds(321, 11, 1, 410);
-		contentPane.add(verticalStrut);
+		contentPaneLeft.add(verticalStrut);
 
 		JSeparator separator = new JSeparator();
 		separator.setForeground(Color.GRAY);
 		separator.setBounds(310, 11, 1, 376);
-		contentPane.add(separator);
+		contentPaneLeft.add(separator);
 
 		JSeparator separator_1 = new JSeparator();
 		separator_1.setBounds(10, 299, 300, 2);
-		contentPane.add(separator_1);
+		contentPaneLeft.add(separator_1);
 
 		JButton btnGo = new JButton("Suche starten");
 		btnGo.setBounds(134, 247, 114, 23);
-		contentPane.add(btnGo);
+		contentPaneLeftButton.add(btnGo);
 		btnGo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
 				GuiMainHandler handler = new GuiMainHandler();
@@ -169,11 +230,33 @@ public class MainFrame extends JFrame { // implements ActionListener,
 
 		resultTable = new JTable(new DefaultTableModel(model, new Object[] {
 				"Bp-Abk.", "Bp-Name", "Bp-Typ", "Distanz" }));
-		// JScrollPane scroll = new JScrollPane(resultTable);
-		resultTable.setBounds(366, 26, 408, 346);
+		resultTable.setBounds(366, 26, 300, 346);
+		// resultTable.setBounds(366, 26, 408, 346);
 		resultTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		JScrollPane scroll = new JScrollPane(resultTable);
 		TableColumnAdjuster tca = new TableColumnAdjuster(resultTable);
-		contentPane.add(resultTable);
+		contentPaneRight.add(scroll);
+		/* PW contentPane.add(resultTable); */
+
+		JButton btnGrafik = new JButton("Grafische Darstellung");
+		btnGrafik.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			}
+		});
+
+		btnGrafik.setBounds(366, 383, 165, 23);
+		contentPaneRight.add(btnGrafik);
+		btnGrafik.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ae) {
+				GrafikView grafik = new GrafikView(GuiMainHandler.shortestPath);
+				// grafik.karte = grafik.drawPanel.getGraphics();
+				// grafik.setVisible(true);
+				System.out.println("Grösse shortestPath bei Button Grafik: "
+						+ GuiMainHandler.shortestPath.size());
+			}
+		});
+		System.out.println("Grösse shortestPath VOR Klick auf Button: "
+				+ shortestPath.size());
 
 		// data
 		for (Row bhf : bhfRows) {
@@ -194,19 +277,32 @@ public class MainFrame extends JFrame { // implements ActionListener,
 
 	public static void refreshResultPane(List<ResultRow> bpResultRows) {
 
-		// for (ResultRow bp : bpResultRows) {
-		// result = (new String[] { (bp.getBpAbk()), bp.getBpName(),
-		// bp.getBpTyp_s(), bp.getDistToNext_s() });
-		// }
-
-		resultTableColumnNames = new String[] { "Bp-Abk.", " Bp-Bezeichnung",
-				" Bp-Typ", "Distanz" };
+		for (ResultRow bp : bpResultRows) {
+			result = (new String[] { (bp.getBpAbk()), bp.getBpName(),
+					bp.getBpTyp_s(), bp.getDistToNext_s() });
+		}
 
 		DefaultTableModel model = (DefaultTableModel) resultTable.getModel();
 		for (ResultRow bp : bpResultRows) {
 			model.addRow(new Object[] { (bp.getBpAbk()), bp.getBpName(),
 					bp.getBpTyp(), bp.getDistToNext() });
 		}
+		resultTable.setModel(model);
+
+		/*
+		 * resultTable = new JTable(new DefaultTableModel(model, new Object[] {
+		 * "Bp-Abk.", "Bp-Name", "Bp-Typ", "Distanz" })); // JScrollPane scroll
+		 * = new JScrollPane(resultTable); // resultTable.setBounds(366, 26,
+		 * 408, // 346);
+		 */
+		resultTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		TableColumnAdjuster tca = new TableColumnAdjuster(resultTable);
+		// contentPane.add(resultTable);
+
+		resultTableColumnNames = new String[] { "Bp-Abk.", " Bp-Bezeichnung",
+				" Bp-Typ", "Distanz" };
+
+		// resultTable = new JTable(new DefaultTableModel());
 
 		// model.addRow(new Object[])
 
@@ -228,7 +324,6 @@ public class MainFrame extends JFrame { // implements ActionListener,
 
 		// }
 	}
-
 	// public void itemStateChanged(ItemEvent sc) {
 	// if (sc.getSource() == this.cbo_startHelper) {
 	// Row selectedItem = (Row) cbo_startHelper.getSelectedItem();

@@ -8,6 +8,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.JOptionPane;
+
 import ch.zhaw.hoferrol.shortestrailpath.algorithm.BpHelper;
 import ch.zhaw.hoferrol.shortestrailpath.algorithm.Dijkstra;
 import ch.zhaw.hoferrol.shortestrailpath.topologie.Betriebspunkt;
@@ -54,7 +56,7 @@ public class GuiMainHandler implements IGuiMainHandler {
 		while (it.hasNext()) {
 			Object key = it.next();
 			Betriebspunkt bp = (Betriebspunkt) bpMap.get(key);
-			if (bp.getBetriebspunkt_typ() <= 2) {
+			if ((bp.getUic() == 85) & (bp.getBetriebspunkt_typ() <= 2)) {
 				bhfList.add(bp);
 			}
 
@@ -86,7 +88,10 @@ public class GuiMainHandler implements IGuiMainHandler {
 			// System.out.println(bhf.getBezeichnung());
 
 		}
-		MainFrame mainFrame = new MainFrame(bhfRows);
+		MainFrame mainFrame = new MainFrame(bhfRows, shortestPath);
+		// MainFrame mainFrame = new MainFrame(bhfRows);
+		System.out.println("Grösse shortestPath bei GuiMainHandler: "
+				+ shortestPath.size());
 		mainFrame.setVisible(true);
 		return bhfRows;
 
@@ -94,6 +99,9 @@ public class GuiMainHandler implements IGuiMainHandler {
 
 	public List<ResultRow> getResult(List<BpHelper> shortestPath) {
 
+		this.shortestPath = shortestPath;
+		System.out.println("Grösse shortestPath nach Suche: "
+				+ shortestPath.size());
 		BpHelper helper = null;
 		Betriebspunkt helperBp = null;
 		ResultRow tmpBp;
@@ -128,10 +136,26 @@ public class GuiMainHandler implements IGuiMainHandler {
 	public void getWork(long start_id, long ziel_id) {
 		startHelper = helperMap.get(start_id);
 		zielHelper = helperMap.get(ziel_id);
-		Dijkstra dijkstra = new Dijkstra(helperMap);
-		dijkstra.work(bpVerbMap, startHelper, helperMap);
-		shortestPath = dijkstra.getShortestPath(startHelper, zielHelper);
-		getResult(shortestPath);
 
+		if (start_id != ziel_id) {
+
+			Dijkstra dijkstra = new Dijkstra(helperMap);
+			dijkstra.work(bpVerbMap, startHelper, helperMap);
+			shortestPath = dijkstra.getShortestPath(startHelper, zielHelper);
+			getResult(shortestPath);
+			System.out.println("Grösse shortestPath bei Klick auf los: "
+					+ shortestPath.size());
+		} else {
+			JOptionPane
+					.showMessageDialog(
+							null,
+							"Ausgangsort entspricht dem Zielort. Bitte Auswahl überprüfen",
+							"Start ist gleich Ziel", 0);
+		}
+
+	}
+
+	public List<BpHelper> guiGetShortestPath() {
+		return shortestPath;
 	}
 }

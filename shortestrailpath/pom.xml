@@ -21,5 +21,62 @@
       <version>4.0</version>
       <scope>test</scope>
     </dependency>
+    
+    <dependency>
+        <groupId>org.jdom</groupId>
+        <artifactId>jdom2</artifactId>
+        <version>2.0.5</version>
+    </dependency>
+    
+    
+    <dependency>
+        <groupId>log4j</groupId>
+        <artifactId>log4j</artifactId>
+        <version>1.2.17</version>
+        
+    </dependency>
+    
   </dependencies>
+  
+  <build>
+  <plugins>
+      
+      <plugin>
+  <artifactId>maven-assembly-plugin</artifactId>
+  <configuration>
+    <archive>
+      <manifest>
+        <mainClass>ch.zhaw.hoferrol.shortestrailpath.main.Main</mainClass>
+      </manifest>
+      <manifestEntries>
+            <SplashScreen-Image>SplashScreen-Entwurf.png</SplashScreen-Image>
+          </manifestEntries>
+    </archive>
+    <descriptorRefs>
+      <descriptorRef>jar-with-dependencies</descriptorRef>
+    </descriptorRefs>
+  </configuration>
+  <executions>
+    <execution>
+      <id>make-assembly</id>
+      <phase>package</phase>
+      <goals>
+        <goal>single</goal>
+      </goals>
+    </execution>
+  </executions>
+</plugin>
+      
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>2.3.2</version>
+            <configuration>
+                <source>1.7</source>
+                <target>1.7</target>
+            </configuration>
+        </plugin>
+
+  </plugins>
+</build>
 </project>

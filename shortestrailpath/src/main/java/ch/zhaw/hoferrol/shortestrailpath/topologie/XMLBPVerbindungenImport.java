@@ -1,11 +1,12 @@
 package ch.zhaw.hoferrol.shortestrailpath.topologie;
 
-import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -14,26 +15,49 @@ import org.jdom2.output.XMLOutputter;
 
 public class XMLBPVerbindungenImport {
 
-	static List<BetriebspunktVerbindungen> bpVerbList = new ArrayList<BetriebspunktVerbindungen>();
+	private List<BetriebspunktVerbindungen> bpVerbList = new ArrayList<BetriebspunktVerbindungen>();
+	// private static final String BP_VERB_FILE_NAME =
+	// "betriebspunktverbindungen.xml";
+
+	private static final Logger LOG = Logger
+			.getLogger(XMLBPVerbindungenImport.class);
+
+	private final URL importVerbUrl;
+
+	public XMLBPVerbindungenImport(URL url) {
+		LOG.info("BP-Verbindungen-Import initialisiert mit URL " + url);
+		importVerbUrl = url;
+	}
 
 	// public static void main(String[] args) {
 
-	public static void xmlBpVerbindungImport(Map<Long, Betriebspunkt> hashBp) {
+	public List<BetriebspunktVerbindungen> xmlBpVerbindungImport(
+			Map<Long, Betriebspunkt> hashBp) {
 
 		Document doc = null;
-		List alleKinder;
+		List<Element> alleKinder;
 
 		// String fileName = System.getProperty("bpFile");
 		// File f = new File("d:\\uno_betriebspunkt.xml");
-		File f = new File("betriebspunktverbindungen.xml");
+		// File f = new File("betriebspunktverbindungen.xml");
 
 		// List<BetriebspunktVerbindungen> bpVerbList = new
 		// ArrayList<BetriebspunktVerbindungen>();
+		//
+		// File f = new File(BP_VERB_FILE_NAME);
+		//
+		// if (!f.canRead()) {
+		// throw new IllegalArgumentException(
+		// "datei "
+		// + BP_VERB_FILE_NAME
+		// +
+		// " zum einlesen der betriebspunkt verbindungen wurde nicht gefunden!");
+		// }
 
 		try {
 			// Das Dokument erstellen
 			SAXBuilder builder = new SAXBuilder();
-			doc = builder.build(f);
+			doc = builder.build(importVerbUrl);
 			XMLOutputter fmt = new XMLOutputter();
 
 			// komplettes Dokument ausgeben
@@ -47,7 +71,7 @@ public class XMLBPVerbindungenImport {
 			// System.out.println("Wurzelelementname: " + element.getName());
 
 			// Eine Liste aller direkten Kindelemente eines Elementes erstellen
-			alleKinder = (List) element.getChildren();
+			alleKinder = element.getChildren();
 			// System.out.println("Erstes Kindelement: "
 			// + ((Element) alleKinder.get(0)).getName());
 			// System.out.println("Liste aller Kinder: " + alleKinder.size());
@@ -66,7 +90,7 @@ public class XMLBPVerbindungenImport {
 				Element kind2 = ((Element) alleKinder.get(i));
 				List<Element> columns2 = kind2.getChildren();
 				for (Element col2 : columns2) {
-					System.out.println(col2.getAttributeValue("NAME") + ": "
+					LOG.debug(col2.getAttributeValue("NAME") + ": "
 							+ col2.getValue());
 				}
 				Long bpVon = Long.valueOf(columns2.get(1).getText());
@@ -85,8 +109,8 @@ public class XMLBPVerbindungenImport {
 				bpVerbList.add(bpVerb);
 
 				//
-				System.out.println("size: " + bpVerbList.size());
-				System.out.println("----------");
+				LOG.debug("size: " + bpVerbList.size());
+				LOG.debug("----------");
 			}
 
 		} catch (JDOMException e) {
@@ -94,11 +118,14 @@ public class XMLBPVerbindungenImport {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
 
-	public List<BetriebspunktVerbindungen> getBpVerbList() {
 		return bpVerbList;
 
 	}
+
+	// public List<BetriebspunktVerbindungen> getBpVerbList() {
+	// return bpVerbList;
+	//
+	// }
 
 }
