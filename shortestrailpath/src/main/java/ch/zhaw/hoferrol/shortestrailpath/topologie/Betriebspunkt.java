@@ -1,7 +1,35 @@
 package ch.zhaw.hoferrol.shortestrailpath.topologie;
 
+/**
+ * Klasse Betriebspunkt Verwaltet in der Topologie die Betriebspunkte.
+ * 
+ * Parameter:
+ * 
+ * abkuerzung : Kürzel des Betriebspunktes. Dient im Bahnumfeld zur Abkürzung
+ * von Namen in der Umgangssprache sowie in bahnspezifischen Dokumenten.
+ * 
+ * bezeichnung : Ausgeschriebener Name des Betriebspunktes, meist ein
+ * Ortschaftsnamen oder eine Regionsbezeichnung.
+ * 
+ * id_betriebspunkt: id welche durch den Topologie-Lieferant (UNO) vergeben
+ * wurde. Dient später als key in der Hashmap.
+ * 
+ * betriebspunkt_typ: Dient der Differenzierung ob ein Betriebspunkt ein
+ * Bahnhof, eine Haltestelle oder eine Abzweigung usw. ist.
+ * 
+ * TODO!! koo_x : X-Koordinaten des Betriebspunktes auf Basis von
+ * 
+ * TODO!! koo_y : Y-Koordinaten des Betriebspunktes auf Basis von
+ * 
+ * uic : Ländercode. Ermöglicht Unterscheidung zwischen Betriebspunkten in der
+ * Schweiz oder dem Ausland.
+ * 
+ * @author Roland Hofer, V1.0 - 20.04.2014
+ * 
+ */
 public class Betriebspunkt {
 
+	// Variabeln
 	String abkuerzung;
 	String bezeichnung;
 	long id_betriebspunkt;
@@ -10,11 +38,7 @@ public class Betriebspunkt {
 	float koo_y;
 	int uic;
 
-	// List<Betriebspunkt> nextBp = new ArrayList<Betriebspunkt>();
-	// BpHelper vorher;
-	// double distanzZumStart;
-	// BpStatusEnum status;
-
+	// Konstruktor
 	public Betriebspunkt(String abk, String bez, long id_bp, int bp_typ,
 			float xPos, float yPos, int uic) {
 		abkuerzung = abk;
@@ -58,45 +82,5 @@ public class Betriebspunkt {
 	public int getUic() {
 		return uic;
 	}
-
-	// public void setNextBp(Betriebspunkt next) {
-	// this.nextBp.add(next);
-	// }
-	//
-	// public void setNextBpList(List<Betriebspunkt> nextList) {
-	// this.nextBp = nextList;
-	// }
-	//
-	// List<Betriebspunkt> getNext() {
-	// return nextBp;
-	// }
-
-	// public void setBpVorher(BpHelper bpHelper) {
-	// this.vorher = bpHelper;
-	// }
-	//
-	// public BpHelper getBpVorher() {
-	// return vorher;
-	// }
-	//
-	// public void setDistanzZumStart(double distanz) {
-	// this.distanzZumStart = distanz;
-	// }
-	//
-	// public double getDistanzZumStart() {
-	// return distanzZumStart;
-	// }
-	//
-	// public String toString() {
-	// return this.bezeichnung;
-	// }
-	//
-	// public BpStatusEnum getStatus() {
-	// return status;
-	// }
-	//
-	// public void setStatus(BpStatusEnum status) {
-	// this.status = status;
-	// }
 
 }

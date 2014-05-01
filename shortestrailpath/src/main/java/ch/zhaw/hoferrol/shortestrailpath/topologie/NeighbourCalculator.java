@@ -6,10 +6,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import ch.zhaw.hoferrol.shortestrailpath.algorithm.BpHelper;
 
 public class NeighbourCalculator {
 
+	private static final Logger LOG = Logger
+			.getLogger(NeighbourCalculator.class);
 	List<BpHelper> nextList = new ArrayList<BpHelper>();
 	Map<Betriebspunkt, List<Betriebspunkt>> hashNextBp = new HashMap<Betriebspunkt, List<Betriebspunkt>>();
 	static Map<Long, BetriebspunktVerbindungen> bpVerbMap = new HashMap<Long, BetriebspunktVerbindungen>();
@@ -40,6 +44,21 @@ public class NeighbourCalculator {
 			// Zuerst mal alle Nachbar-Betriebspunkte ermitteln
 			Betriebspunkt bpVon = bpMap.get(verbindung.getId_bpVon());
 			Betriebspunkt bpBis = bpMap.get(verbindung.getId_bpBis());
+
+			if (bpVon == null) {
+				LOG.info("Bp mit ID: " + verbindung.id_bpVon
+						+ " in Bp-Verbindung mit der ID: "
+						+ verbindung.id_bpVerbindung
+						+ " nicht in Topologie vorhanden!");
+				break;
+			}
+			if (bpBis == null) {
+				LOG.info("Bp mit ID: " + verbindung.id_bpBis
+						+ " in Bp-Verbindung mit der ID: "
+						+ verbindung.id_bpVerbindung
+						+ " nicht in Topologie vorhanden!");
+				break;
+			}
 
 			// Prüfung ob der betrachtete Betriebspunkt bereits eine Liste mit
 			// Nachbarn hat
