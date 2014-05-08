@@ -10,13 +10,18 @@ import java.util.Map;
 
 import javax.swing.JOptionPane;
 
+import org.apache.log4j.Logger;
+
 import ch.zhaw.hoferrol.shortestrailpath.algorithm.BpHelper;
 import ch.zhaw.hoferrol.shortestrailpath.algorithm.Dijkstra;
 import ch.zhaw.hoferrol.shortestrailpath.topologie.Betriebspunkt;
 import ch.zhaw.hoferrol.shortestrailpath.topologie.BetriebspunktVerbindungen;
+import ch.zhaw.hoferrol.shortestrailpath.topologie.BorderPoint;
 import ch.zhaw.hoferrol.shortestrailpath.topologie.NeighbourCalculator;
 
 public class GuiMainHandler implements IGuiMainHandler {
+
+	private static final Logger LOG = Logger.getLogger(GuiMainHandler.class);
 
 	// ActionListener actionListener = new ActionListener();
 	Map<Long, Betriebspunkt> bpMap = new HashMap<Long, Betriebspunkt>();
@@ -25,19 +30,23 @@ public class GuiMainHandler implements IGuiMainHandler {
 
 	List<Row> bhfRows = new ArrayList<Row>();
 	List<ResultRow> bpResultRows = new ArrayList<ResultRow>();
+	private float runTime;
 
 	static List<BpHelper> shortestPath = new ArrayList<BpHelper>();
+	static List<BpHelper> greenBpList = new ArrayList<BpHelper>();
+	static List<BorderPoint> border = new ArrayList<BorderPoint>();
 
 	static BpHelper startHelper = null;
 	static BpHelper zielHelper = null;
 
 	public GuiMainHandler(Map<Long, Betriebspunkt> bpMap,
 			Map<Long, BetriebspunktVerbindungen> bpVerbMap,
-			Map<Long, BpHelper> helperMap) {
+			Map<Long, BpHelper> helperMap, List<BorderPoint> border) {
 		this.bpMap = bpMap;
 		getSortedHelperMap();
 		this.helperMap = helperMap;
 		this.bpVerbMap = bpVerbMap;
+		this.border = border;
 
 	}
 
@@ -88,20 +97,31 @@ public class GuiMainHandler implements IGuiMainHandler {
 			// System.out.println(bhf.getBezeichnung());
 
 		}
-		MainFrame mainFrame = new MainFrame(bhfRows, shortestPath);
+		MainFrame mainFrame = new MainFrame(bhfRows, shortestPath, border);
 		// MainFrame mainFrame = new MainFrame(bhfRows);
-		System.out.println("Grösse shortestPath bei GuiMainHandler: "
+		LOG.debug("Grösse shortestPath bei GuiMainHandler: "
 				+ shortestPath.size());
 		mainFrame.setVisible(true);
+
 		return bhfRows;
 
+	}
+
+	public String getShortestDistanzToStart() {
+		if (shortestPath.size() > 0) {
+			float dist = ((float) zielHelper.getDistanzZumStart() / 1000);
+			MainFrame.showDistanzStart(String.valueOf(dist));
+			// System.out.println(String.valueOf(dist));
+			return (String.valueOf(dist));
+
+		} else {
+			return String.valueOf(Long.MAX_VALUE);
+		}
 	}
 
 	public List<ResultRow> getResult(List<BpHelper> shortestPath) {
 
 		this.shortestPath = shortestPath;
-		System.out.println("Grösse shortestPath nach Suche: "
-				+ shortestPath.size());
 		BpHelper helper = null;
 		Betriebspunkt helperBp = null;
 		ResultRow tmpBp;
@@ -128,23 +148,36 @@ public class GuiMainHandler implements IGuiMainHandler {
 				.getBezeichnung(), helperBp.getAbkuerzung(), helperBp
 				.getBetriebspunkt_typ(), helperBp.getKoo_x(), helperBp
 				.getKoo_y(), 0L));
-		MainFrame.refreshResultPane(bpResultRows);
+		MainFrame.refreshResultPane(bpResultRows, greenBpList);
+		// MainFrame.refreshResultPane(bpResultRows);
+		getShortestDistanzToStart();
+		getRuntime();
+		// MainFrame.showRuntime(getRuntime());
 		return bpResultRows;
 
 	}
 
-	public void getWork(long start_id, long ziel_id) {
+	public void getWork(long start_id, long ziel_id, int modus) {
 		startHelper = helperMap.get(start_id);
 		zielHelper = helperMap.get(ziel_id);
 
 		if (start_id != ziel_id) {
 
 			Dijkstra dijkstra = new Dijkstra(helperMap);
-			dijkstra.work(bpVerbMap, startHelper, helperMap);
+			// int modus = Dijkstra.MODUS_OPTIMIERT;
+			// int modus = Dijkstra.MODUS_CLASSIC;
+			// int modus = Dijkstra.MODUS_ASTERN;
+			greenBpList = dijkstra.work(bpVerbMap, startHelper, zielHelper,
+					modus, helperMap);
+			LOG.info("Grösse greenBpList im GuiMainHandler beträgt: "
+					+ greenBpList.size());
+			// dijkstra.work(bpVerbMap, startHelper, zielHelper, modus,
+			// helperMap);
 			shortestPath = dijkstra.getShortestPath(startHelper, zielHelper);
+			runTime = ((float) dijkstra.getLaufzeit() / 1000000);
 			getResult(shortestPath);
-			System.out.println("Grösse shortestPath bei Klick auf los: "
-					+ shortestPath.size());
+			LOG.info("Laufzeit: " + dijkstra.getLaufzeit());
+
 		} else {
 			JOptionPane
 					.showMessageDialog(
@@ -158,4 +191,15 @@ public class GuiMainHandler implements IGuiMainHandler {
 	public List<BpHelper> guiGetShortestPath() {
 		return shortestPath;
 	}
+
+	public void getRuntime() {
+		MainFrame.showRuntime(runTime);
+		LOG.info("Laufzeit in Methode getRuntime " + runTime);
+
+	}
+
+	public List<BpHelper> getBesuchteBp() {
+		return greenBpList;
+	}
+
 }

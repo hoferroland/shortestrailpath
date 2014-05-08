@@ -11,10 +11,14 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import org.apache.log4j.Logger;
+
 import ch.zhaw.hoferrol.shortestrailpath.algorithm.BpHelper;
+import ch.zhaw.hoferrol.shortestrailpath.topologie.BorderPoint;
 
 public class GrafikView extends JFrame {
 
+	private static final Logger LOG = Logger.getLogger(GrafikView.class);
 	private JFrame grafikframe;
 	private JPanel myPanel, buttonPanel;
 	private JPanel drawPanel;
@@ -22,40 +26,34 @@ public class GrafikView extends JFrame {
 	private Graphics karte;
 	private int[] grafikSize = new int[4];
 	private List<BpHelper> shortestPath = new ArrayList<BpHelper>();
+	private List<BpHelper> greenBpList = new ArrayList<BpHelper>();
+	private List<BorderPoint> border = new ArrayList<BorderPoint>();
 	private int maxI;
 	private int minI;
 	private int maxJ;
 	private int minJ;
+	int anzeigeModus;
+	public static final int ANZEIGEMODUS_BEFAHREN = 0;
+	public static final int ANZEIGEMODUS_BEARBEITET = 1;
 
-	public GrafikView(List<BpHelper> shortestPath) {
+	public GrafikView(List<BpHelper> shortestPath, List<BorderPoint> border,
+			List<BpHelper> greenBpList, int anzeigeModus) {
 		super("ShortestRailPath - Grafische Ausgabe des Suchresultates");
 		this.shortestPath = shortestPath;
+		this.border = border;
+		this.greenBpList = greenBpList;
+		this.anzeigeModus = anzeigeModus;
 		this.setSize(1200, 800);
-		this.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
-		// this.pack();
+		this.setDefaultCloseOperation(javax.swing.JFrame.DISPOSE_ON_CLOSE);
 
 		createGrafikFrame();
-		System.out.println("Grösse Shortestpath in GrafikView: "
-				+ shortestPath.size());
 
 	}
 
 	public void createGrafikFrame() {
 
-		// javax.swing.JFrame.setDefaultLookAndFeelDecorated(true);
-		// javax.swing.JFrame grafikframe = new javax.swing.JFrame(
-		// "ShortestRailPath - Grafische Ausgabe des Suchresultates");
-		// PW grafikframe = new
-		// JFrame("ShortestRailPath - Grafische Ausgabe des Suchresultates");
-		// PW
-		// grafikframe.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
-		// PW grafikframe.pack();
-
-		// PW grafikframe.setSize(1200, 800);
-		// PW maxI = (grafikframe.getWidth() - 25);
 		maxI = (this.getWidth() - 25);
 		minI = 5;
-		// PW maxJ = (grafikframe.getHeight() - 55);
 		maxJ = (this.getHeight() - 55);
 		minJ = 5;
 		grafikSize[0] = maxI;
@@ -63,13 +61,9 @@ public class GrafikView extends JFrame {
 		grafikSize[2] = maxJ;
 		grafikSize[3] = minJ;
 
-		System.out.println("Grösse shortestPath GrafikView = "
-				+ shortestPath.size());
-
 		myPanel = new JPanel();
 		myPanel.setLayout(new FlowLayout());
 		resetButton = new JButton("Sicht wiederherstellen");
-		// resetButton.addActionListener();
 		setContentPane(myPanel);
 		drawPanel = new GPanel();
 		buttonPanel = new JPanel();
@@ -80,15 +74,11 @@ public class GrafikView extends JFrame {
 		myPanel.add(drawPanel);
 		myPanel.add(buttonPanel);
 		buttonPanel.add(resetButton);
-		// Graphics karte = drawPanel.getGraphics();
-		// karte = drawPanel.getGraphics();
 
-		// System.out.println("Ausgabe Kartenwert: " + karte);
 		this.setVisible(true);
 
 		GrafikViewHandler grafikHandler = new GrafikViewHandler(shortestPath,
-				grafikSize);
-		// drawResult(karte);
+				greenBpList, border, grafikSize);
 	}
 
 	class GPanel extends JPanel {
@@ -97,7 +87,6 @@ public class GrafikView extends JFrame {
 			this.setBackground(Color.WHITE);
 		}
 
-		// public void drawResult(Graphics karte) {
 		@Override
 		public void paintComponent(Graphics g) {
 			super.paintComponents(g);
@@ -106,28 +95,47 @@ public class GrafikView extends JFrame {
 			Color cBp1 = new Color(255, 0, 0);
 			Color cBp2 = new Color(0, 255, 0);
 
+			BorderPoint bpoint = null;
+			LOG.debug("Border-Size beträgt: " + border.size());
+
+			for (int iborder = 0; iborder < border.size(); iborder++) {
+				bpoint = (BorderPoint) border.get(iborder);
+				float ixKoo = (bpoint.getKooI() + 0.5f);
+				float jyKoo = (bpoint.getKooJ() + 0.5f);
+
+				g.setColor(new Color(182, 182, 182));
+				g.drawOval((int) ixKoo, (int) jyKoo, 1, 1);
+			}
+
+			if (anzeigeModus == ANZEIGEMODUS_BEARBEITET) {
+				for (int i = 0; i < greenBpList.size(); i++) {
+					helper = (BpHelper) greenBpList.get(i);
+					float ixKoo = (helper.getIKoo() + 0.5f);
+					float jyKoo = (helper.getJKoo() + 0.5f);
+
+					g.setColor(Color.GREEN);
+					g.drawOval((int) ixKoo, (int) jyKoo, 2, 2);
+					g.fillOval((int) ixKoo, (int) jyKoo, 2, 2);
+				}
+			}
+
 			for (int i = 0; i < shortestPath.size(); i++) {
 				helper = (BpHelper) shortestPath.get(i);
-				System.out.println("Ausgabe Helper: "
-						+ helper.getBp().getBezeichnung() + ", "
-						+ helper.getIKoo() + ", " + helper.getJKoo());
+				LOG.debug("Ausgabe Helper: " + helper.getBp().getBezeichnung()
+						+ ", " + helper.getIKoo() + ", " + helper.getJKoo());
 				float ixKoo = (helper.getIKoo() + 0.5f);
 				float jyKoo = (helper.getJKoo() + 0.5f);
 
-				System.out.println("Ausgabe Helper ix und jy "
+				LOG.debug("Ausgabe Helper ix und jy "
 						+ helper.getBp().getBezeichnung() + ", " + (int) ixKoo
 						+ ", " + (int) jyKoo);
-				System.out.println((int) ixKoo + ", " + (int) jyKoo + ", 3, 3");
 
-				System.out.println(g);
+				// System.out.println(g);
 				g.setColor(Color.RED);
-				// g.drawOval((int) ixKoo + i * 10, (int) jyKoo + i * 10, 3, 3);
-				g.drawOval((int) ixKoo, (int) jyKoo, 3, 3);
-
+				g.drawOval((int) ixKoo, (int) jyKoo, 4, 4);
+				g.fillOval((int) ixKoo, (int) jyKoo, 4, 4);
 			}
 
-			// g.setColor(cBp1);
-			// g.drawOval(helper.getIKoo(), helper.getJKoo(), 3, 3);
 		}
 
 		public int[] getGrafikPanelSize() {

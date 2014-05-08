@@ -1,7 +1,9 @@
 package ch.zhaw.hoferrol.shortestrailpath.gui;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -13,6 +15,7 @@ import java.util.List;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -20,13 +23,17 @@ import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import ch.zhaw.hoferrol.shortestrailpath.algorithm.BpHelper;
+import ch.zhaw.hoferrol.shortestrailpath.algorithm.Dijkstra;
+import ch.zhaw.hoferrol.shortestrailpath.topologie.BorderPoint;
 
 public class MainFrame extends JFrame { // implements ActionListener,
 										// ItemListener {
@@ -43,7 +50,24 @@ public class MainFrame extends JFrame { // implements ActionListener,
 	private static JPanel contentPaneLeftZiel;
 	private static JPanel contentPaneLeftModus;
 	private static JPanel contentPaneLeftButton;
+	private static JPanel contentPaneLeftTime;
+	private static JPanel contentPaneRightTop;
+	private static JPanel contentPaneRightTable;
+	private static JPanel contentPaneRightButton;
 	private static JLabel resultDistanz;
+	private static JRadioButton dijkstraNormal;
+	private static JRadioButton dijkstraOpt;
+	private static JRadioButton dijkstraAStern;
+	private static ButtonGroup radioAlgorithmusGroup = new ButtonGroup();
+	private static Box box = Box.createVerticalBox();
+	private static JRadioButton anzeigeWeg;
+	private static JRadioButton anzeigeBearbeitet;
+	private static ButtonGroup radioAnzeigeModus = new ButtonGroup();
+	private static Box boxAnzeige = Box.createVerticalBox();
+	private static JTextField runTime;
+	private static JTextField distanzStart;
+	private static JButton btnGo;
+	private static JButton btnGrafik;
 	List<Row> bhfRows = new ArrayList<Row>();
 	private static JTable resultTable;
 	private static String[] resultTableColumnNames;
@@ -51,8 +75,13 @@ public class MainFrame extends JFrame { // implements ActionListener,
 	static String result[] = new String[] { null };
 	private Row startRow = null;
 	private Row zielRow = null;
+	private int modusAlgorithmus;
+	private int modusAnzeige;
+	private List<ResultRow> bpResultRows = new ArrayList<ResultRow>();
 	private JComboBox<Row> cbo_startHelper = new JComboBox<Row>();
 	private JComboBox<Row> cbo_zielHelper = new JComboBox<Row>();
+
+	// private List<BpHelper> greenBpList = new ArrayList<BpHelper>();
 
 	// private List<BpHelper> shortestPath = new ArrayList<BpHelper>();
 
@@ -75,7 +104,8 @@ public class MainFrame extends JFrame { // implements ActionListener,
 	/**
 	 * Create the frame.
 	 */
-	public MainFrame(List<Row> bhfRows, List<BpHelper> shortestPath) {
+	public MainFrame(List<Row> bhfRows, List<BpHelper> shortestPath,
+			List<BorderPoint> border) {
 		// public MainFrame(List<Row> bhfRows) {
 
 		this.bhfRows = bhfRows;
@@ -83,7 +113,7 @@ public class MainFrame extends JFrame { // implements ActionListener,
 
 		setTitle("shortestRailPath - Navigator");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 950, 540);
+		setBounds(100, 100, 1050, 600);
 
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -112,26 +142,9 @@ public class MainFrame extends JFrame { // implements ActionListener,
 		contentPaneLeftTop = new JPanel();
 
 		contentPaneLeftStart = new JPanel();
-		// BoxLayout boxLayoutTop = new BoxLayout(contentPaneLeftTop,
-		// BoxLayout.Y_AXIS);
-		// BoxLayout boxLayoutStart = new BoxLayout(contentPaneLeftStart,
-		// BoxLayout.Y_AXIS);
-		// BoxLayout boxLayoutZiel = new BoxLayout(contentPaneLeftZiel,
-		// BoxLayout.Y_AXIS);
-
-		// contentPaneLeftTop.setLayout(new BoxLayout(contentPaneLeftTop,
-		// BoxLayout.Y_AXIS));
-		// contentPaneLeftStart.setLayout(new BoxLayout(contentPaneLeftStart,
-		// BoxLayout.X_AXIS));
-		// contentPaneLeftZiel = new JPanel();
-		// contentPaneLeftZiel.setLayout(new BoxLayout(contentPaneLeftZiel,
-		// BoxLayout.X_AXIS));
-		// contentPaneLeftModus = new JPanel();
-		// contentPaneLeftModus.setLayout(new BoxLayout(contentPaneLeftModus,
-		// BoxLayout.X_AXIS));
-		// contentPaneLeftButton = new JPanel();
-		// contentPaneLeftButton.setLayout(new BoxLayout(contentPaneLeftButton,
-		// BoxLayout.X_AXIS));
+		contentPaneRightTop = new JPanel();
+		contentPaneRightTable = new JPanel();
+		contentPaneRightButton = new JPanel();
 
 		contentPaneLeftTop.setLayout(new GridLayout(3, 2));
 		contentPaneLeftStart.setLayout(new GridLayout(3, 2));
@@ -141,12 +154,24 @@ public class MainFrame extends JFrame { // implements ActionListener,
 		contentPaneLeftModus.setLayout(new GridLayout(3, 2));
 		contentPaneLeftButton = new JPanel();
 		contentPaneLeftButton.setLayout(new GridLayout(3, 2));
+		contentPaneLeftTime = new JPanel();
+		BorderLayout borderLayout = new BorderLayout();
+		contentPaneLeftTime.setLayout(borderLayout);
 
 		contentPaneLeft.add(contentPaneLeftTop);
 		contentPaneLeft.add(contentPaneLeftStart);
 		contentPaneLeft.add(contentPaneLeftZiel);
 		contentPaneLeft.add(contentPaneLeftModus);
 		contentPaneLeft.add(contentPaneLeftButton);
+		contentPaneLeft.add(contentPaneLeftTime);
+
+		contentPaneRightTop.setLayout(new FlowLayout());
+		contentPaneRightTable.setLayout(new GridLayout(1, 1));
+		contentPaneRightButton.setLayout(new BorderLayout());
+
+		contentPaneRight.add(contentPaneRightTop);
+		contentPaneRight.add(contentPaneRightTable);
+		contentPaneRight.add(contentPaneRightButton);
 
 		JLabel lblStartHelper = new JLabel("Ausgangsbahnhof:");
 		lblStartHelper.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -197,6 +222,38 @@ public class MainFrame extends JFrame { // implements ActionListener,
 		cbo_zielHelper.setBounds(10, 181, 238, 29);
 		contentPaneLeftZiel.add(cbo_zielHelper);
 
+		// Option zur Berechnung des kürzesten Weges
+		// Optionsfelder erzeugen
+		dijkstraNormal = new JRadioButton("Dijkstra-Classic", true);
+		dijkstraOpt = new JRadioButton("Dijkstra-Optimiert");
+		dijkstraAStern = new JRadioButton("Dijkstra mit A* kombiniert");
+
+		radioAlgorithmusGroup.add(dijkstraNormal);
+		radioAlgorithmusGroup.add(dijkstraOpt);
+		radioAlgorithmusGroup.add(dijkstraAStern);
+
+		box.add(Box.createVerticalGlue());
+		box.add(dijkstraNormal);
+		box.add(dijkstraOpt);
+		box.add(dijkstraAStern);
+		box.add(Box.createVerticalGlue());
+
+		contentPaneLeftModus.add(box);
+
+		runTime = new JTextField();
+		runTime.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		runTime.setEditable(false);
+		contentPaneLeftTime.add(runTime, BorderLayout.WEST);
+		runTime.setVisible(true);
+		runTime.setBorder(null);
+
+		// Listeners Radio Buttons
+		// dijkstraNormal.addItemListener(norm);
+		// dijkstraOpt.addItemListener(opt);
+		// dijkstraAStern.addItemListener(stern);
+
+		// Beschriftungsfeld für aktiviertes Kontrollkäs
+
 		Component verticalStrut = Box.createVerticalStrut(20);
 		verticalStrut.setBounds(321, 11, 1, 410);
 		contentPaneLeft.add(verticalStrut);
@@ -204,21 +261,38 @@ public class MainFrame extends JFrame { // implements ActionListener,
 		JSeparator separator = new JSeparator();
 		separator.setForeground(Color.GRAY);
 		separator.setBounds(310, 11, 1, 376);
-		contentPaneLeft.add(separator);
+		contentPaneLeftTime.add(separator, BorderLayout.NORTH);
 
 		JSeparator separator_1 = new JSeparator();
 		separator_1.setBounds(10, 299, 300, 2);
-		contentPaneLeft.add(separator_1);
+		contentPaneLeftTime.add(separator_1, BorderLayout.SOUTH);
 
-		JButton btnGo = new JButton("Suche starten");
+		btnGo = new JButton("Suche starten");
 		btnGo.setBounds(134, 247, 114, 23);
 		contentPaneLeftButton.add(btnGo);
 		btnGo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
 				GuiMainHandler handler = new GuiMainHandler();
-				handler.getWork(startRow.getId(), zielRow.getId());
+				if (dijkstraNormal.isSelected()) {
+					modusAlgorithmus = Dijkstra.MODUS_CLASSIC;
+				}
+				if (dijkstraOpt.isSelected()) {
+					modusAlgorithmus = Dijkstra.MODUS_OPTIMIERT;
+				}
+				if (dijkstraAStern.isSelected()) {
+					modusAlgorithmus = Dijkstra.MODUS_ASTERN;
+				}
+				handler.getWork(startRow.getId(), zielRow.getId(),
+						modusAlgorithmus);
 			}
 		});
+
+		distanzStart = new JTextField();
+		distanzStart.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		distanzStart.setEditable(false);
+		contentPaneRightTop.add(distanzStart);
+		distanzStart.setVisible(true);
+		distanzStart.setBorder(null);
 
 		// resultTable = new JTable();
 		// Object o[] = new Object[] { "Bp-Abk.", "Bp-Name", "Bp-Typ", "Distanz"
@@ -229,34 +303,65 @@ public class MainFrame extends JFrame { // implements ActionListener,
 		// contentPane.add(new JScrollPane(resultTable));
 
 		resultTable = new JTable(new DefaultTableModel(model, new Object[] {
-				"Bp-Abk.", "Bp-Name", "Bp-Typ", "Distanz" }));
-		resultTable.setBounds(366, 26, 300, 346);
+				"Bp-Abk.", "Bp-Name", "Bp-Typ", "Distanz" }) {
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		});
+		resultTable.setBounds(366, 26, 280, 346);
 		// resultTable.setBounds(366, 26, 408, 346);
 		resultTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		JScrollPane scroll = new JScrollPane(resultTable);
 		TableColumnAdjuster tca = new TableColumnAdjuster(resultTable);
-		contentPaneRight.add(scroll);
+		contentPaneRightTable.add(scroll);
 		/* PW contentPane.add(resultTable); */
 
-		JButton btnGrafik = new JButton("Grafische Darstellung");
-		btnGrafik.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-			}
-		});
+		anzeigeWeg = new JRadioButton("Nur Anzeige befahrene Betriebspunkte",
+				true);
+		anzeigeBearbeitet = new JRadioButton(
+				"Anzeige 'besuchte' und befahrene Betriebspunkte");
 
+		radioAnzeigeModus.add(anzeigeWeg);
+		radioAnzeigeModus.add(anzeigeBearbeitet);
+
+		boxAnzeige.add(Box.createVerticalGlue());
+		boxAnzeige.add(anzeigeWeg);
+		boxAnzeige.add(anzeigeBearbeitet);
+		boxAnzeige.add(Box.createVerticalGlue());
+
+		contentPaneRightButton.add(boxAnzeige, BorderLayout.WEST);
+		boxAnzeige.setVisible(false);
+
+		// JButton btnGrafik = new JButton("Grafische Darstellung");
+		// btnGrafik.addActionListener(new ActionListener() {
+		// public void actionPerformed(ActionEvent arg0) {
+		// }
+		// });
+
+		btnGrafik = new JButton("Grafische Darstellung");
 		btnGrafik.setBounds(366, 383, 165, 23);
-		contentPaneRight.add(btnGrafik);
+		contentPaneRightButton.add(btnGrafik, BorderLayout.EAST);
 		btnGrafik.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
-				GrafikView grafik = new GrafikView(GuiMainHandler.shortestPath);
+				// GrafikView grafik = new
+				// GrafikView(GuiMainHandler.shortestPath,
+				// GuiMainHandler.border);
+				if (anzeigeWeg.isSelected()) {
+					modusAnzeige = GrafikView.ANZEIGEMODUS_BEFAHREN;
+				}
+				if (anzeigeBearbeitet.isSelected()) {
+					modusAnzeige = GrafikView.ANZEIGEMODUS_BEARBEITET;
+				}
+
+				GrafikView grafik = new GrafikView(GuiMainHandler.shortestPath,
+						GuiMainHandler.border, GuiMainHandler.greenBpList,
+						modusAnzeige);
 				// grafik.karte = grafik.drawPanel.getGraphics();
 				// grafik.setVisible(true);
-				System.out.println("Grösse shortestPath bei Button Grafik: "
-						+ GuiMainHandler.shortestPath.size());
+
 			}
 		});
-		System.out.println("Grösse shortestPath VOR Klick auf Button: "
-				+ shortestPath.size());
+		btnGrafik.setVisible(false);
 
 		// data
 		for (Row bhf : bhfRows) {
@@ -275,18 +380,27 @@ public class MainFrame extends JFrame { // implements ActionListener,
 
 	}
 
-	public static void refreshResultPane(List<ResultRow> bpResultRows) {
-
-		for (ResultRow bp : bpResultRows) {
-			result = (new String[] { (bp.getBpAbk()), bp.getBpName(),
-					bp.getBpTyp_s(), bp.getDistToNext_s() });
-		}
-
-		DefaultTableModel model = (DefaultTableModel) resultTable.getModel();
+	public static void refreshResultPane(List<ResultRow> bpResultRows,
+			List<BpHelper> greenBpList) {
+		bpResultRows = bpResultRows;
+		// greenBpList = greenBpList;
+		System.out.println("Grösse greenBpList in MainFrame = "
+				+ greenBpList.size());
+		// for (ResultRow bp : bpResultRows) {
+		// result = (new String[] { (bp.getBpAbk()), bp.getBpName(),
+		// bp.getBpTyp_s(), bp.getDistToNext_s() });
+		// }
+		DefaultTableModel model = null;
+		model = (DefaultTableModel) resultTable.getModel();
+		// DefaultTableModel model = (DefaultTableModel) resultTable.getModel();
+		// zuerst Tabelleninhalt löschen (falls 'alte' Abfrageresultate
+		// drinstehen
+		model.setRowCount(0);
 		for (ResultRow bp : bpResultRows) {
 			model.addRow(new Object[] { (bp.getBpAbk()), bp.getBpName(),
 					bp.getBpTyp(), bp.getDistToNext() });
 		}
+
 		resultTable.setModel(model);
 
 		/*
@@ -302,27 +416,31 @@ public class MainFrame extends JFrame { // implements ActionListener,
 		resultTableColumnNames = new String[] { "Bp-Abk.", " Bp-Bezeichnung",
 				" Bp-Typ", "Distanz" };
 
-		// resultTable = new JTable(new DefaultTableModel());
+		boxAnzeige.setVisible(true);
+		btnGrafik.setVisible(true);
 
-		// model.addRow(new Object[])
+	}
 
-		// Object[][] tableResultDaten = null;
-		// tableResultDaten = {
-		// for (ResultRow bp : bpResultRows) {
-		// {(bp.getBpName()), (bp.getBpAbk()), (bp.getBpTyp())}
-		// };
-		// }
+	public static void showDistanzStart(String gesamtDistanz) {
+		distanzStart.setText("Die Länge des kürzesten Weges beträgt: "
+				+ gesamtDistanz + " Kilometer.");
+		distanzStart.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		contentPaneRightTop.add(distanzStart);
+		distanzStart.setEditable(false);
+		distanzStart.setVisible(true);
+		contentPane.revalidate();
 
-		// txtPaneResult
-		// .setText("Der Weg von Start nach Ziel führt über folgende Betriebspunkte:");
-		// String inh = "";
-		// for (ResultRow bp : bpResultRows) {
-		// inh = inh + (bp.getBpName()) + "   Abk: " + (bp.getBpAbk()) + "\n";
-		// }
-		// txtPaneResult.setText(inh);
-		// txtPaneResult.i
+	}
 
-		// }
+	public static void showRuntime(float getRunTime) {
+		runTime.setText("Die Laufzeit der Wegsuche betrug: "
+				+ (String.valueOf(getRunTime)) + " Millisekunden.");
+		runTime.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		contentPaneLeftTime.add(runTime, BorderLayout.WEST);
+		runTime.setEditable(false);
+		runTime.setVisible(true);
+		contentPane.revalidate();
+
 	}
 	// public void itemStateChanged(ItemEvent sc) {
 	// if (sc.getSource() == this.cbo_startHelper) {
