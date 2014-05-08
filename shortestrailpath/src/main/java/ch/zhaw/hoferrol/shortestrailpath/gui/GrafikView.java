@@ -114,8 +114,9 @@ public class GrafikView extends JFrame {
 					float jyKoo = (helper.getJKoo() + 0.5f);
 
 					g.setColor(Color.GREEN);
-					g.drawOval((int) ixKoo, (int) jyKoo, 2, 2);
-					g.fillOval((int) ixKoo, (int) jyKoo, 2, 2);
+					g.drawRect((int) ixKoo, (int) jyKoo, 2, 2);
+					// g.drawOval((int) ixKoo, (int) jyKoo, 2, 2);
+					// g.fillOval((int) ixKoo, (int) jyKoo, 2, 2);
 				}
 			}
 
