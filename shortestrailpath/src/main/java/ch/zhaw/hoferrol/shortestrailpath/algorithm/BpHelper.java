@@ -11,6 +11,26 @@ import ch.zhaw.hoferrol.shortestrailpath.topologie.BetriebspunktVerbindungen;
 import ch.zhaw.hoferrol.shortestrailpath.topologie.BpStatusEnum;
 import ch.zhaw.hoferrol.shortestrailpath.topologie.NeighbourCalculator;
 
+/**
+ * Klasse BpHelper - stattet einen Betriebspunkt mit zusätzlichen Attributen für
+ * den Dijkstra bzw. A*-Algorithmus aus.
+ * 
+ * Ein BpHelper besteht grundsätzlich aus einem Betriebspunkt (1:1-Beziehung).
+ * Zusätzlich werden auf einem BpHelper folgende Attribute verwaltet: Liste von
+ * Betriebspunkten nextBp für die Nachbarn eines Betriebspunktes
+ * (1:n-Beziehung); vorher = 'optimaler' Vorgänger Betriebspunkt (wird durch
+ * Dijkstra bzw. A* ermittelt); distanzZumStart = Aufaddierte Distanz des Weges
+ * zum Start (wird durch Dijkstra bzw. A* ermittelt); status = status rot oder
+ * grün (ob Betriebspunkt durch Algorithmus besucht wurde oder nicht); iKoo =
+ * Bildschirm-Koordinate für die x-Achse; jKoo = Bildschirm-Koordinate für die
+ * y-Achse; airDistanzZumZiel = Luftdistanz zum Ziel (wird für Heuristik beim
+ * A*-Algorithmus benötigt.
+ * 
+ * 
+ * @author Roland Hofer, V1.0 - 18.04.2014
+ * 
+ */
+
 public class BpHelper {
 
 	// Variabeln
@@ -22,6 +42,7 @@ public class BpHelper {
 	BpHelper bpHelper;
 	float iKoo;
 	float jKoo;
+	long airDistanzZumZiel;
 
 	// Konstruktor für einen BpHelper
 	public BpHelper(Betriebspunkt bp) {
@@ -37,6 +58,7 @@ public class BpHelper {
 		this.nextBp.add(next);
 	}
 
+	// setze Liste von Nachbarn
 	public void setNextBpList(List<Betriebspunkt> nextList) {
 		this.nextBp = nextList;
 	}
@@ -45,6 +67,7 @@ public class BpHelper {
 		return nextBp;
 	}
 
+	// setze idealen Vorgänger
 	public void setBpVorher(Betriebspunkt vorher) {
 		this.vorher = vorher;
 	}
@@ -73,6 +96,7 @@ public class BpHelper {
 		this.status = status;
 	}
 
+	// Bildschirmkoordinate I
 	public void setIKoo(float iKoo) {
 		this.iKoo = iKoo;
 	}
@@ -81,6 +105,7 @@ public class BpHelper {
 		return iKoo;
 	}
 
+	// Bildschirmkoordinaten J
 	public void setJKoo(float jKoo) {
 		this.jKoo = jKoo;
 	}
@@ -89,9 +114,17 @@ public class BpHelper {
 		return jKoo;
 	}
 
+	// Luftdistanz zum Ziel für Heuristik A*-Algo
+	public void setAirDistanzZumZiel(long airdistanz) {
+		this.airDistanzZumZiel = airdistanz;
+	}
+
+	public long getAirDistanzZumZiel() {
+		return airDistanzZumZiel;
+	}
+
 	// Methode, welche aus der Map Betriebspunkt und der Map
-	// BetriebspunktVerbindungen
-	// eine Map mit BpHelpern macht
+	// BetriebspunktVerbindungen eine Map mit BpHelpern macht
 	public static Map<Long, BpHelper> buildHelperMap(
 			Map<Long, Betriebspunkt> bpMap,
 			Map<Long, BetriebspunktVerbindungen> bpVerMap) {
@@ -113,21 +146,10 @@ public class BpHelper {
 			Betriebspunkt bp = (Betriebspunkt) bpMap.get(key);
 			// erstelle neuen BpHelper mit Betriebspunkt als Uebergabeparameter
 			BpHelper h = new BpHelper(bp);
-			// füge dem BpHelpter seine Liste von NachbarBetriebspunkte zu
+			// füge dem BpHelpter seine Liste von NachbarBetriebspunkten zu
 			h.setNextBpList(neighbourCalc.getNext(bp.getId_betriebspunkt()));
-			// füge jeden BpHelper der bpHelperMap hinzu
+			// füge jedem BpHelper seine bpHelperMap hinzu
 			bpHelperMap.put(bp.getId_betriebspunkt(), h);
-
-			// Konsolenausgabe, welche Betriebspunkte dem BpHelper
-			// hinzugefügt wurden
-			// (Debug und Test)
-			// System.out.println("Zum BpHelper " + h.bp.getAbkuerzung()
-			// + " folgende Nachbarn hinzugefügt: ");
-			// for (Betriebspunkt bp1 : (neighbourCalc.getNext(bp
-			// .getId_betriebspunkt()))) {
-			// System.out.print(bp1.getAbkuerzung() + ", "
-			// + bp1.getBezeichnung());
-			// }
 
 		}
 		return bpHelperMap;
