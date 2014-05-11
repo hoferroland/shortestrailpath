@@ -20,6 +20,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
@@ -35,8 +36,9 @@ import ch.zhaw.hoferrol.shortestrailpath.algorithm.BpHelper;
 import ch.zhaw.hoferrol.shortestrailpath.algorithm.Dijkstra;
 import ch.zhaw.hoferrol.shortestrailpath.topologie.BorderPoint;
 
-public class MainFrame extends JFrame { // implements ActionListener,
-										// ItemListener {
+public class MainFrame extends JFrame implements ActionListener { // implements
+																	// ActionListener,
+	// ItemListener {
 
 	/**
 	 * 
@@ -54,6 +56,11 @@ public class MainFrame extends JFrame { // implements ActionListener,
 	private static JPanel contentPaneRightTop;
 	private static JPanel contentPaneRightTable;
 	private static JPanel contentPaneRightButton;
+	private static JMenuBar menuLeiste;
+	private static JMenu menuDatei;
+	private static JMenu menuInfo;
+	private static JMenuItem itemSchliessen;
+	private static JMenuItem itemInfo;
 	private static JLabel resultDistanz;
 	private static JRadioButton dijkstraNormal;
 	private static JRadioButton dijkstraOpt;
@@ -115,17 +122,31 @@ public class MainFrame extends JFrame { // implements ActionListener,
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1050, 600);
 
-		JMenuBar menuBar = new JMenuBar();
-		setJMenuBar(menuBar);
+		menuLeiste = new JMenuBar();
+		setJMenuBar(menuLeiste);
+		menuDatei = new JMenu("Datei");
+		menuInfo = new JMenu("Info");
+		menuLeiste.add(menuDatei);
+		menuLeiste.add(menuInfo);
 
-		JMenuItem mntmDatei = new JMenuItem("Datei");
-		menuBar.add(mntmDatei);
+		itemSchliessen = new JMenuItem("schliessen");
+		menuDatei.add(itemSchliessen);
+		itemSchliessen.addActionListener(this);
+		itemInfo = new JMenuItem("Info über");
+		menuInfo.add(itemInfo);
+		itemInfo.addActionListener(this);
 
-		JMenuItem mntmGrafik = new JMenuItem("Grafik");
-		menuBar.add(mntmGrafik);
-
-		JMenuItem mntmInfo = new JMenuItem("Info");
-		menuBar.add(mntmInfo);
+		// JMenuBar menuBar = new JMenuBar();
+		// setJMenuBar(menuBar);
+		//
+		// JMenuItem mntmDatei = new JMenuItem("Datei");
+		// menuBar.add(mntmDatei);
+		//
+		// JMenuItem mntmGrafik = new JMenuItem("Grafik");
+		// menuBar.add(mntmGrafik);
+		//
+		// JMenuItem mntmInfo = new JMenuItem("Info");
+		// menuBar.add(mntmInfo);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -184,24 +205,6 @@ public class MainFrame extends JFrame { // implements ActionListener,
 				startRow = selectedItem;
 			}
 		});
-		// {
-		// public void actionPerformed(ActionEvent ae) {
-		// Row selectedItem = (Row) cbo_startHelper.getSelectedItem();
-		// startRow = selectedItem;
-		// // System.out.println("StartHelper = " + startRow.getId());
-		//
-		// }
-
-		// @Override
-		// public void itemStateChanged(ItemEvent arg0) {
-		// // TODO Auto-generated method stub
-		//
-		// }
-		// });
-		// cbo_startHelper.addActionListener(actionListener.itemStateChanged(cbo_startHelper);
-
-		// action listener
-		// cbo_startHelper.addActionListener(actionListener);
 
 		cbo_startHelper.setBounds(10, 79, 238, 29);
 		contentPaneLeftStart.add(cbo_startHelper);
@@ -246,11 +249,6 @@ public class MainFrame extends JFrame { // implements ActionListener,
 		contentPaneLeftTime.add(runTime, BorderLayout.WEST);
 		runTime.setVisible(true);
 		runTime.setBorder(null);
-
-		// Listeners Radio Buttons
-		// dijkstraNormal.addItemListener(norm);
-		// dijkstraOpt.addItemListener(opt);
-		// dijkstraAStern.addItemListener(stern);
 
 		// Beschriftungsfeld für aktiviertes Kontrollkäs
 
@@ -442,6 +440,7 @@ public class MainFrame extends JFrame { // implements ActionListener,
 		contentPane.revalidate();
 
 	}
+
 	// public void itemStateChanged(ItemEvent sc) {
 	// if (sc.getSource() == this.cbo_startHelper) {
 	// Row selectedItem = (Row) cbo_startHelper.getSelectedItem();
@@ -451,5 +450,16 @@ public class MainFrame extends JFrame { // implements ActionListener,
 	// zielRow = selectedItem;
 	// }
 	// }
+
+	@Override
+	public void actionPerformed(ActionEvent object) {
+		if (object.getSource() == itemInfo) {
+			InfoView info = new InfoView();
+		}
+		if (object.getSource() == itemSchliessen) {
+			System.exit(0);
+		}
+
+	}
 
 }

@@ -19,7 +19,7 @@ import ch.zhaw.hoferrol.shortestrailpath.topologie.BorderPoint;
 public class GrafikView extends JFrame {
 
 	private static final Logger LOG = Logger.getLogger(GrafikView.class);
-	private JFrame grafikframe;
+	// private JFrame grafikframe;
 	private JPanel myPanel, buttonPanel;
 	private JPanel drawPanel;
 	private JButton resetButton;
@@ -114,7 +114,7 @@ public class GrafikView extends JFrame {
 					float jyKoo = (helper.getJKoo() + 0.5f);
 
 					g.setColor(Color.GREEN);
-					g.drawRect((int) ixKoo, (int) jyKoo, 2, 2);
+					g.drawRect((int) ixKoo, (int) jyKoo, 3, 3);
 					// g.drawOval((int) ixKoo, (int) jyKoo, 2, 2);
 					// g.fillOval((int) ixKoo, (int) jyKoo, 2, 2);
 				}
