@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,13 +18,13 @@ import org.apache.log4j.Logger;
 import ch.zhaw.hoferrol.shortestrailpath.algorithm.BpHelper;
 import ch.zhaw.hoferrol.shortestrailpath.topologie.BorderPoint;
 
-public class GrafikView extends JFrame {
+public class GrafikView extends JFrame implements ActionListener {
 
 	private static final Logger LOG = Logger.getLogger(GrafikView.class);
 	// private JFrame grafikframe;
 	private JPanel myPanel, buttonPanel;
 	private JPanel drawPanel;
-	private JButton resetButton;
+	private JButton legendeButton;
 	private Graphics karte;
 	private int[] grafikSize = new int[4];
 	private List<BpHelper> shortestPath = new ArrayList<BpHelper>();
@@ -54,7 +56,7 @@ public class GrafikView extends JFrame {
 
 		maxI = (this.getWidth() - 25);
 		minI = 5;
-		maxJ = (this.getHeight() - 55);
+		maxJ = (this.getHeight() - 90);
 		minJ = 5;
 		grafikSize[0] = maxI;
 		grafikSize[1] = minI;
@@ -63,17 +65,18 @@ public class GrafikView extends JFrame {
 
 		myPanel = new JPanel();
 		myPanel.setLayout(new FlowLayout());
-		resetButton = new JButton("Sicht wiederherstellen");
+		legendeButton = new JButton("Legende anzeigen");
+		legendeButton.addActionListener(this);
 		setContentPane(myPanel);
 		drawPanel = new GPanel();
 		buttonPanel = new JPanel();
 		drawPanel.setPreferredSize(new Dimension(maxI, maxJ));
 		drawPanel.setBackground(Color.WHITE);
 
-		buttonPanel.setPreferredSize(new Dimension(maxI, 20));
+		buttonPanel.setPreferredSize(new Dimension(maxI, 35));
 		myPanel.add(drawPanel);
 		myPanel.add(buttonPanel);
-		buttonPanel.add(resetButton);
+		buttonPanel.add(legendeButton);
 
 		this.setVisible(true);
 
@@ -83,7 +86,7 @@ public class GrafikView extends JFrame {
 
 	class GPanel extends JPanel {
 		public GPanel() {
-			setPreferredSize(new Dimension(1200, 800));
+			setPreferredSize(new Dimension(maxI, maxJ));
 			this.setBackground(Color.WHITE);
 		}
 
@@ -143,4 +146,12 @@ public class GrafikView extends JFrame {
 			return grafikSize;
 		}
 	}
+
+	@Override
+	public void actionPerformed(ActionEvent object) {
+		if (object.getSource() == legendeButton) {
+			LegendView legende = new LegendView();
+		}
+	}
+
 }
