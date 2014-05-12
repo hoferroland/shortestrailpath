@@ -90,7 +90,7 @@ public class Main {
 		// BpHelper zielHelper = helperMap.get(241L); // Trimbach
 		// BpHelper zielHelper = helperMap.get(406L); // Winti
 
-		// dijkstra.work(hashBpVerb, startHelper, zielHelper, 0, helperMap);
+		// dijkstra.work(hashBpVerb, startHelper, zielHelper, 1, helperMap);
 
 		// dijkstra.work(hashBpVerb, startHelper, zielHelper, 1,
 		// BpHelper.buildHelperList(hashBp, hashBpVerb));

@@ -65,7 +65,11 @@ public class GuiMainHandler implements IGuiMainHandler {
 		while (it.hasNext()) {
 			Object key = it.next();
 			Betriebspunkt bp = (Betriebspunkt) bpMap.get(key);
-			if ((bp.getUic() == 85) & (bp.getBetriebspunkt_typ() <= 2)) {
+			if ((bp.getUic() == 85)
+					&& ((bp.getBetriebspunkt_typ() <= 2)
+							|| (bp.getBetriebspunkt_typ() == 4)
+							|| (bp.getBetriebspunkt_typ() == 5) || (bp
+							.getBetriebspunkt_typ() == 6))) {
 				bhfList.add(bp);
 			}
 

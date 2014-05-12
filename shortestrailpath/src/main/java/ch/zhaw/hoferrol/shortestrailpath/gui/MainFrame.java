@@ -16,6 +16,7 @@ import java.util.List;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -55,7 +56,9 @@ public class MainFrame extends JFrame implements ActionListener { // implements
 	private static JPanel contentPaneLeftTime;
 	private static JPanel contentPaneRightTop;
 	private static JPanel contentPaneRightTable;
+	private static JPanel contentPaneRightTableIcon;
 	private static JPanel contentPaneRightButton;
+	private static JPanel contentPaneRightBlank;
 	private static JMenuBar menuLeiste;
 	private static JMenu menuDatei;
 	private static JMenu menuInfo;
@@ -77,6 +80,11 @@ public class MainFrame extends JFrame implements ActionListener { // implements
 	private static JButton btnGrafik;
 	List<Row> bhfRows = new ArrayList<Row>();
 	private static JTable resultTable;
+	private static JLabel blank;
+	// private static JLabel logoLabel;
+	// private static Image logo;
+	// private static Image icon;
+	private static JScrollPane scroll;
 	private static String[] resultTableColumnNames;
 	private static Object[][] model;
 	static String result[] = new String[] { null };
@@ -87,6 +95,7 @@ public class MainFrame extends JFrame implements ActionListener { // implements
 	private List<ResultRow> bpResultRows = new ArrayList<ResultRow>();
 	private JComboBox<Row> cbo_startHelper = new JComboBox<Row>();
 	private JComboBox<Row> cbo_zielHelper = new JComboBox<Row>();
+	private static final String LOGO_FILE_NAME = "/Logo.jpg";
 
 	// private List<BpHelper> greenBpList = new ArrayList<BpHelper>();
 
@@ -166,6 +175,7 @@ public class MainFrame extends JFrame implements ActionListener { // implements
 		contentPaneRightTop = new JPanel();
 		contentPaneRightTable = new JPanel();
 		contentPaneRightButton = new JPanel();
+		contentPaneRightBlank = new JPanel();
 
 		contentPaneLeftTop.setLayout(new GridLayout(3, 2));
 		contentPaneLeftStart.setLayout(new GridLayout(3, 2));
@@ -187,7 +197,8 @@ public class MainFrame extends JFrame implements ActionListener { // implements
 		contentPaneLeft.add(contentPaneLeftTime);
 
 		contentPaneRightTop.setLayout(new FlowLayout());
-		contentPaneRightTable.setLayout(new GridLayout(1, 1));
+		// contentPaneRightTable.setLayout(new GridLayout(1, 1));
+		contentPaneRightTable.setLayout(new BorderLayout());
 		contentPaneRightButton.setLayout(new BorderLayout());
 
 		contentPaneRight.add(contentPaneRightTop);
@@ -309,10 +320,25 @@ public class MainFrame extends JFrame implements ActionListener { // implements
 		resultTable.setBounds(366, 26, 280, 346);
 		// resultTable.setBounds(366, 26, 408, 346);
 		resultTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		JScrollPane scroll = new JScrollPane(resultTable);
+		scroll = new JScrollPane(resultTable);
 		TableColumnAdjuster tca = new TableColumnAdjuster(resultTable);
-		contentPaneRightTable.add(scroll);
-		/* PW contentPane.add(resultTable); */
+
+		/*
+		 * PW JViewport view = new JViewport() { public void
+		 * paintComponent(Graphics g) { logo = getLogo(); g.drawImage(logo, 0,
+		 * 0, getWidth(), getHeight(), this); } }; view.add(resultTable);
+		 * scroll.setViewport(view);
+		 */
+		blank = new JLabel(" ");
+		blank.setFont(new Font("Tahoma", Font.PLAIN, 86));
+		contentPaneRightBlank.add(blank, BorderLayout.CENTER);
+		contentPaneRightTable.add(contentPaneRightBlank, BorderLayout.CENTER);
+
+		JLabel imageLabel = new JLabel("", new ImageIcon(getClass()
+				.getResource(LOGO_FILE_NAME)), JLabel.CENTER);
+		JPanel logoPanel = new JPanel(new BorderLayout());
+		logoPanel.add(imageLabel, BorderLayout.SOUTH);
+		contentPaneRightTable.add(logoPanel, BorderLayout.SOUTH);
 
 		anzeigeWeg = new JRadioButton("Nur Anzeige befahrene Betriebspunkte",
 				true);
@@ -330,20 +356,11 @@ public class MainFrame extends JFrame implements ActionListener { // implements
 		contentPaneRightButton.add(boxAnzeige, BorderLayout.WEST);
 		boxAnzeige.setVisible(false);
 
-		// JButton btnGrafik = new JButton("Grafische Darstellung");
-		// btnGrafik.addActionListener(new ActionListener() {
-		// public void actionPerformed(ActionEvent arg0) {
-		// }
-		// });
-
 		btnGrafik = new JButton("Grafische Darstellung");
 		btnGrafik.setBounds(366, 383, 165, 23);
 		contentPaneRightButton.add(btnGrafik, BorderLayout.EAST);
 		btnGrafik.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
-				// GrafikView grafik = new
-				// GrafikView(GuiMainHandler.shortestPath,
-				// GuiMainHandler.border);
 				if (anzeigeWeg.isSelected()) {
 					modusAnzeige = GrafikView.ANZEIGEMODUS_BEFAHREN;
 				}
@@ -371,11 +388,6 @@ public class MainFrame extends JFrame implements ActionListener { // implements
 
 	public static void getResult(List<ResultRow> bpResultRows) {
 
-		// resultTableColumnNames = new String[] { "Bp-Abk.", " Bp-Bezeichnung",
-		// " Bp-Typ", "Distanz" };
-
-		// DefaultTableModel model = (DefaultTableModel) resultTable.getModel();
-
 	}
 
 	public static void refreshResultPane(List<ResultRow> bpResultRows,
@@ -400,6 +412,14 @@ public class MainFrame extends JFrame implements ActionListener { // implements
 		}
 
 		resultTable.setModel(model);
+		contentPaneRightTable.removeAll();
+		contentPaneRightTable.add(scroll);
+		// icon = null;
+		// logo = null;
+		scroll.setVisible(true);
+
+		// contentPaneRightTable.revalidate();
+		// contentPaneRight.repaint();
 
 		/*
 		 * resultTable = new JTable(new DefaultTableModel(model, new Object[] {

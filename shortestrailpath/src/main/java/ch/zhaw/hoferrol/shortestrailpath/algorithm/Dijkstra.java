@@ -16,6 +16,15 @@ import ch.zhaw.hoferrol.shortestrailpath.topologie.BetriebspunktVerbindungen;
 import ch.zhaw.hoferrol.shortestrailpath.topologie.BpStatusEnum;
 import ch.zhaw.hoferrol.shortestrailpath.topologie.NeighbourCalculator;
 
+/**
+ * Klasse Dijkstra - Logikteil der Applikation, berechnet den kürzesten Weg
+ * zwischen zwei übergebenen Betriebspunkten. Mit dem übergebenen Modus wird die
+ * Wahl der Berechnungsvariaten (Dijkstra-classic, Dijkstra-optimiert oder A*)
+ * defininiert.
+ * 
+ * @author Roland Hofer, V1.8 - 08.05.2014
+ */
+
 public class Dijkstra {
 	// Konstanten für Wahl des Berechnungsmodus
 	public static final int MODUS_CLASSIC = 0;
@@ -90,25 +99,16 @@ public class Dijkstra {
 	}
 
 	// Methode um Status eines BpHelpers zu grün zu setzen.
-	// BpHelper wird in der redBpList-Array gelöscht. Falls der Status
-	// des Bp-Helpers 'rot' ist, hinzufügen des BpHelpers zur
-	// greenBpList-Array. Anschliessend den Status des BpHelpers auf 'gruen'
-	// setzen.
-
-	// public void changeBpToGreen(BpHelper bpHelperBp) {
-	// redBpList.remove(bpHelperBp);
-	// if (bpHelperBp.getStatus().equals(BpStatusEnum.gruen)) {
-	// greenBpList.add(bpHelperBp);
-	// }
-	// bpHelperBp.setStatus(BpStatusEnum.gruen);
-	// }
+	// BpHelper wird in der redBpList-Array oder in der yellowBpList
+	// gelöscht. Der BpHelpers wird zur greenBpList-Array hinzu-
+	// gefügt und der Status des BpHelpers auf 'gruen'
+	// gesetzt.
 	public void changeBpToGreen(BpHelper bpHelperBp) {
 		if (redBpList.contains(bpHelperBp)) {
 			redBpList.remove(bpHelperBp);
 		} else if (yellowBpList.contains(bpHelperBp)) {
 			yellowBpList.remove(bpHelperBp);
 		}
-		// redBpList.remove(bpHelperBp); <<<<<<<<<<<<<<<<<<<<<<<<<<
 		greenBpList.add(bpHelperBp);
 		bpHelperBp.setStatus(BpStatusEnum.gruen);
 	}
@@ -124,7 +124,12 @@ public class Dijkstra {
 		bpHelperBp.setStatus(BpStatusEnum.rot);
 	}
 
-	public void changeBpToYellow(BpHelper bpHelperBp) {
+	// Methode um einen BpHelpers in die yellowBpList
+	// aufzunehmen. Dabei wird dieser aus der redBpList
+	// entfernt.
+	// Bei Modus AStern wird zusätzlich die Heuristik berechnet und
+	// im BpHelper abgespeichert.
+	public void changeBpToYellow(BpHelper bpHelperBp, int modus) {
 		if (redBpList.contains(bpHelperBp)) {
 			redBpList.remove(bpHelperBp);
 
@@ -133,13 +138,16 @@ public class Dijkstra {
 
 		} else {
 			yellowBpList.add(bpHelperBp);
-			bpHelperBp.setAirDistanzZumZiel((long) aSternHeuristikHelper
-					.getAirDistance(bpHelperBp.bp.getId_betriebspunkt(),
-							zielBpHelper.bp.getId_betriebspunkt()));
+			if (modus == MODUS_ASTERN) {
+				bpHelperBp.setAirDistanzZumZiel((long) aSternHeuristikHelper
+						.getAirDistance(bpHelperBp.bp.getId_betriebspunkt(),
+								zielBpHelper.bp.getId_betriebspunkt()));
+			}
 		}
 	}
 
 	// Methode um zwei BpHelper aufgrund der Distanzen zu sortieren
+	// -> wird für Modus Dijkstra-classic und Dijkstra-optimiert verwendet
 	Comparator<BpHelper> sortByDistanz = new Comparator<BpHelper>() {
 		public int compare(BpHelper helperBp1, BpHelper helperBp2) {
 			return Long.signum((helperBp1.getDistanzZumStart() - helperBp2
@@ -148,6 +156,7 @@ public class Dijkstra {
 	};
 
 	// Methode um zwei BpHelper aufgrund der Distanzen zu sortieren
+	// -> wird für Modus AStern verwendet
 	Comparator<BpHelper> sortByDistanzMitAir = new Comparator<BpHelper>() {
 
 		public int compare(BpHelper helperBp1, BpHelper helperBp2) {
@@ -209,29 +218,9 @@ public class Dijkstra {
 				Collections.sort(yellowBpList, sortByDistanzMitAir);
 			}
 
-			// // Versuch neu mit gelber Liste zu arbeiten!!!
-			// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-			// // ArrayList 'redBpList' sortieren nach Distanz
-			// if (modus == MODUS_CLASSIC || modus == MODUS_OPTIMIERT) {
-			// Collections.sort(redBpList, sortByDistanz);
-			// } else if (modus == MODUS_ASTERN) {
-			// Collections.sort(redBpList, sortByDistanz2);
-			// }
-
-			// Ausgabe der neu sortierten ArrayList 'redBpList' auf Konsole
-			// (Test und Debug)
-			// LOG.debug("Restliche BpHelper sortiert nach Distanzen: ");
-			// for (int it = 0; it < redBpList.size(); it++) {
-			// LOG.debug(redBpList.get(it).bp.getAbkuerzung() + ", ("
-			// + redBpList.get(it).bp.getId_betriebspunkt()
-			// + "), Distanz: " + redBpList.get(it).distanzZumStart);
-			// }
-
 			// Setze den BpHelper mit der kleinsten DistanzZumStart = ArrayList
-			// redBpList pos[0] als nextBp, also zum neuen AusgangsBpHelper
+			// yellowBpList pos[0] als nextBp, also zum neuen AusgangsBpHelper
 			// für den nächsten Schleifendurchlauf
-			// BpHelper nextBp = redBpList.get(0);
-			// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 			BpHelper aktuellerBP = yellowBpList.get(0);
 
 			// Ausgabe des nextBp (neuen AusgangsBpHelper für den nächsten
@@ -307,21 +296,7 @@ public class Dijkstra {
 					allBpMap.put(nachbarBpHelper.bp.getId_betriebspunkt(),
 							nachbarBpHelper);
 
-					changeBpToYellow(nachbarBpHelper);
-					// yellowBpList.add(next2Helper); // neu veränderter Helper
-					// der
-					// // yellowListe hinzufügen
-					// // für Dijkstra-Opt und
-					// // AStern
-					// next2Helper
-					// .setAirDistanzZumStart((long) aSternHeuristikHelper
-					// .getAirDistance(next2Helper.bp
-					// .getId_betriebspunkt(),
-					// zielBpHelper.bp
-					// .getId_betriebspunkt()));
-					// aSternHeuristikHelper.getAirDistance(
-					// helperBp1.bp.getId_betriebspunkt(),
-					// zielBpHelper.bp.getId_betriebspunkt());
+					changeBpToYellow(nachbarBpHelper, modus);
 
 					// Ausgabe des Schleifenzählers, des Betriebspunktes 'next2
 					// sowie des
@@ -406,7 +381,6 @@ public class Dijkstra {
 					LOG.debug(helperVorg.bp.getAbkuerzung() + ", "
 							+ " hat keinen Vorgänger!");
 				}
-				// System.out.println("Alle haben Vorgänger");
 			}
 		}
 
@@ -476,7 +450,8 @@ public class Dijkstra {
 
 			// Abbruch der Schlaufe, falls der 'Vorher'Betriebspunkt = dem
 			// 'start'BpHelper ist
-			if (ziel.getBpVorher().equals(start.bp)) {
+			if (ziel.getBpVorher().equals(start.bp)) { // /////// TODO Abfangen
+														// von Fehlern!!!
 				shortestPath.add(start);
 				break;
 			}

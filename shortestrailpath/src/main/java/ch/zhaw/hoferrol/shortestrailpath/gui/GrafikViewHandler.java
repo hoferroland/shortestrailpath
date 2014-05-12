@@ -8,14 +8,33 @@ import org.apache.log4j.Logger;
 import ch.zhaw.hoferrol.shortestrailpath.algorithm.BpHelper;
 import ch.zhaw.hoferrol.shortestrailpath.topologie.BorderPoint;
 
+/**
+ * Klasse GrafikViewHandler - berechnet aus den effektiven x und y Koordinaten
+ * der BpHelper sowie der BorderPoint die zur Anzeige nötigen
+ * Bildschirm-Koordinaten.
+ * 
+ * Eingabeparameter:
+ * 
+ * List BpHelper (greenBpList = Suchresultat)
+ * 
+ * List BorderPoint (Punkte für das Zeichnen der CH-Karte)
+ * 
+ * Array Grafiksize (Uebergabe der Grösse des Zeichenblattes)
+ * 
+ * Rückgabewert:
+ * 
+ * keinen. Es werden die Bildschirmkoordinaten bei den BpHelpern sowie den
+ * BorderPoint abgespeichert.
+ * 
+ * @author Roland Hofer, V1.2 - 08.05.2014
+ */
+
 public class GrafikViewHandler {
 
 	private static final Logger LOG = Logger.getLogger(GrafikViewHandler.class);
 	private List<BpHelper> shortestpath = new ArrayList<BpHelper>();
 	private List<BpHelper> greenBpList = new ArrayList<BpHelper>();
 	private List<BorderPoint> border = new ArrayList<BorderPoint>();
-	// private Map<Long, BpHelper> shortestKooHelper = new HashMap<Long,
-	// BpHelper>();
 
 	private static final float xKooMax = 838000;
 	private static final float xKooMin = 485000;
@@ -51,12 +70,7 @@ public class GrafikViewHandler {
 		BpHelper kooHelper;
 		BorderPoint borderpoint;
 
-		// System.out.println("Bin in Methode 'getViewKoo' angekommen");
-		// System.out.println("Grösse von shortestpath: " +
-		// shortestpath.size());
-
 		for (int i = 0; i < (shortestpath.size()); i++) {
-			// BpHelper kooHelper;
 			kooHelper = (BpHelper) shortestpath.get(i);
 			helperBildschirmKooUmrechner(i, kooHelper);
 		}
@@ -93,14 +107,10 @@ public class GrafikViewHandler {
 		float yKoo;
 		float iKoo;
 		float jKoo;
-		// BpHelper kooHelper;
-		// kooHelper = (BpHelper) shortestpath.get(i);
 		xKoo = kooHelper.getBp().getKoo_x();
 		yKoo = kooHelper.getBp().getKoo_y();
 
 		iKoo = ((xKoo - xKooMin) / (xKooMax - xKooMin)) * (iKooMax - iKooMin);
-		// System.out.println("Bp: " + kooHelper.getBp().getBezeichnung()
-		// + " iKoo = " + iKoo);
 
 		jKoo = (1 - ((yKoo - yKooMin) / (yKooMax - yKooMin)))
 				* (jKooMax - jKooMin);
