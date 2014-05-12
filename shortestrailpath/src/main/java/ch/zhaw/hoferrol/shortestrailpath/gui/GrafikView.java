@@ -3,12 +3,15 @@ package ch.zhaw.hoferrol.shortestrailpath.gui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -117,6 +120,16 @@ public class GrafikView extends JFrame implements ActionListener {
 			super.paintComponents(g);
 
 			BpHelper helper = null;
+			Image start;
+			ImageIcon istart = new ImageIcon(
+					GrafikView.class.getResource("/startpunkt_klein.png"));
+			start = istart.getImage();
+			Image ziel;
+			ImageIcon iziel = new ImageIcon(
+					GrafikView.class.getResource("/zielpunkt_klein.png"));
+			ziel = iziel.getImage();
+			Color bgc = new Color(0f, 0f, 0f, .01f);
+
 			// Color cBp1 = new Color(255, 0, 0);
 			// Color cBp2 = new Color(0, 255, 0);
 
@@ -131,6 +144,7 @@ public class GrafikView extends JFrame implements ActionListener {
 
 				g.setColor(new Color(182, 182, 182));
 				g.drawOval((int) ixKoo, (int) jyKoo, 1, 1);
+
 			}
 
 			// Schleife für das Zeichnen der besuchten Betriebspunkte
@@ -160,6 +174,26 @@ public class GrafikView extends JFrame implements ActionListener {
 				g.setColor(Color.RED);
 				g.drawOval((int) ixKoo, (int) jyKoo, 4, 4);
 				g.fillOval((int) ixKoo, (int) jyKoo, 4, 4);
+				if (i == 0) {
+					g.setColor(Color.BLACK);
+					g.setFont(new Font("default", Font.BOLD, 12));
+					g.drawString(helper.getBp().getBezeichnung(),
+							(int) (helper.getIKoo() - 5),
+							(int) (helper.getJKoo() - 10));
+					// g.drawImage(start, (int) helper.getIKoo(),
+					// (int) helper.getJKoo(), this);
+					g.drawImage(start, (int) helper.getIKoo(),
+							(int) helper.getJKoo(), bgc, this);
+				}
+				if (i == (shortestPath.size() - 1)) {
+					g.setColor(Color.BLACK);
+					g.setFont(new Font("default", Font.BOLD, 12));
+					g.drawString(helper.getBp().getBezeichnung(),
+							(int) (helper.getIKoo() - 3),
+							(int) (helper.getJKoo() - 5));
+					g.drawImage(ziel, (int) helper.getIKoo(),
+							(int) helper.getJKoo(), bgc, this);
+				}
 			}
 
 		}
