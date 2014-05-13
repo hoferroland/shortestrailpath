@@ -8,10 +8,12 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.ImageIcon;
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -120,14 +122,70 @@ public class GrafikView extends JFrame implements ActionListener {
 			super.paintComponents(g);
 
 			BpHelper helper = null;
-			Image start;
-			ImageIcon istart = new ImageIcon(
-					GrafikView.class.getResource("/startpunkt_klein.png"));
-			start = istart.getImage();
-			Image ziel;
-			ImageIcon iziel = new ImageIcon(
-					GrafikView.class.getResource("/zielpunkt_klein.png"));
-			ziel = iziel.getImage();
+			// Image start;
+			// ImageIcon istart = new ImageIcon(
+			// GrafikView.class.getResource("/startpunkt_klein.png"));
+			// start = istart.getImage();
+
+			// String starticon = "/startpunkt_klein.png";
+
+			ClassLoader clStart = this.getClass().getClassLoader();
+			System.out.println("Ausgabe clStart: " + clStart.getClass());
+
+			URL urlStart = clStart.getResource("startpunkt_klein.png");
+			System.out.println("Ausgabe urlStart: " + urlStart);
+			// InputStream streamStart = this.getClass().getResourceAsStream(
+			// starticon);
+			Image start = null;
+			// InputStream isStart =
+			// this.getClass().getResourceAsStream(starticon);
+			try {
+				start = ImageIO.read(urlStart);
+				// BufferedImage biStart = ImageIO.read(streamStart);
+				// start = biStart;
+			} catch (IOException eStart) {
+				// TODO Auto-generated catch block
+				eStart.printStackTrace();
+			}
+
+			// String starticon = "/startpunkt_klein.png";
+			// ClassLoader clStart = Thread.currentThread()
+			// .getContextClassLoader();
+			// InputStream streamStart = clStart.getResourceAsStream(starticon);
+			// BufferedImage biStart = null;
+			// try {
+			// biStart = ImageIO.read(streamStart);
+			// } catch (IOException e) {
+			// // TODO Auto-generated catch block
+			// e.printStackTrace();
+			// }
+
+			// Image ziel;
+			// ImageIcon iziel = new ImageIcon(
+			// GrafikView.class.getResource("/zielpunkt_klein.png"));
+			// ziel = iziel.getImage();
+
+			// String zielicon = "/zielpunkt_klein.png";
+
+			ClassLoader clZiel = this.getClass().getClassLoader();
+			System.out.println("Ausgabe clZiel: " + clZiel.getClass());
+
+			URL urlZiel = clZiel.getResource("zielpunkt_klein.png");
+			System.out.println("Ausgabe urlZiel: " + urlZiel);
+			// InputStream streamStart = this.getClass().getResourceAsStream(
+			// starticon);
+			Image ziel = null;
+			// InputStream isStart =
+			// this.getClass().getResourceAsStream(starticon);
+			try {
+				ziel = ImageIO.read(urlZiel);
+				// BufferedImage biStart = ImageIO.read(streamStart);
+				// start = biStart;
+			} catch (IOException eZiel) {
+				// TODO Auto-generated catch block
+				eZiel.printStackTrace();
+			}
+
 			Color bgc = new Color(0f, 0f, 0f, .01f);
 
 			// Color cBp1 = new Color(255, 0, 0);
@@ -178,7 +236,7 @@ public class GrafikView extends JFrame implements ActionListener {
 					g.setColor(Color.BLACK);
 					g.setFont(new Font("default", Font.BOLD, 12));
 					g.drawString(helper.getBp().getBezeichnung(),
-							(int) (helper.getIKoo() - 5),
+							(int) (helper.getIKoo() - 3),
 							(int) (helper.getJKoo() - 10));
 					// g.drawImage(start, (int) helper.getIKoo(),
 					// (int) helper.getJKoo(), this);
@@ -191,8 +249,8 @@ public class GrafikView extends JFrame implements ActionListener {
 					g.drawString(helper.getBp().getBezeichnung(),
 							(int) (helper.getIKoo() - 3),
 							(int) (helper.getJKoo() - 5));
-					g.drawImage(ziel, (int) helper.getIKoo(),
-							(int) helper.getJKoo(), bgc, this);
+					g.drawImage(ziel, (int) (helper.getIKoo() - 30),
+							(int) (helper.getJKoo() - 31), bgc, this);
 				}
 			}
 

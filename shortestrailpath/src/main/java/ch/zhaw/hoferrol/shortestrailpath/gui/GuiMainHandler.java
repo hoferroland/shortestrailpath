@@ -131,34 +131,48 @@ public class GuiMainHandler implements IGuiMainHandler {
 		ResultRow tmpBp;
 		long distToNext = 0;
 
-		for (int i = 0; i < (shortestPath.size() - 1); i++) {
-			helper = (BpHelper) shortestPath.get(i);
+		if (shortestPath.size() == 0) {
+			JOptionPane
+					.showMessageDialog(
+							null,
+							"Es kann kein Weg gefunden werden. \n"
+									+ "Mögliche Ursachen: \n"
+									+ "Fehlende Betriebspunktverbindung an Umsteigebahnhof zwischen zwei Bahnunternehmungen. \n"
+									+ "Bitte versuchen Sie eine andere Verbindungsanfrage. Besten Dank.",
+							"Kein Weg gefunden", 0);
+		} else {
+
+			for (int i = 0; i < (shortestPath.size() - 1); i++) {
+				helper = (BpHelper) shortestPath.get(i);
+				helperBp = helper.getBp();
+
+				distToNext = NeighbourCalculator.getDistanz(helper.getBp()
+						.getId_betriebspunkt(), shortestPath.get(i + 1).getBp()
+						.getId_betriebspunkt());
+
+				tmpBp = new ResultRow(helperBp.getId_betriebspunkt(),
+						helperBp.getBezeichnung(), helperBp.getAbkuerzung(),
+						helperBp.getBetriebspunkt_typ(), helper.getBpTypKurz(),
+						helper.getBpTypLang(), helperBp.getKoo_x(),
+						helperBp.getKoo_y(), distToNext);
+
+				bpResultRows.add(tmpBp);
+			}
+			helper = (BpHelper) shortestPath.get(shortestPath.size() - 1);
 			helperBp = helper.getBp();
-
-			distToNext = NeighbourCalculator.getDistanz(helper.getBp()
-					.getId_betriebspunkt(), shortestPath.get(i + 1).getBp()
-					.getId_betriebspunkt());
-
-			tmpBp = new ResultRow(helperBp.getId_betriebspunkt(),
+			bpResultRows.add(new ResultRow(helperBp.getId_betriebspunkt(),
 					helperBp.getBezeichnung(), helperBp.getAbkuerzung(),
-					helperBp.getBetriebspunkt_typ(), helperBp.getKoo_x(),
-					helperBp.getKoo_y(), distToNext);
+					helperBp.getBetriebspunkt_typ(), helper.getBpTypKurz(),
+					helper.getBpTypLang(), helperBp.getKoo_x(), helperBp
+							.getKoo_y(), 0L));
+			MainFrame.refreshResultPane(bpResultRows, greenBpList);
+			// MainFrame.refreshResultPane(bpResultRows);
+			getShortestDistanzToStart();
+			getRuntime();
+			// MainFrame.showRuntime(getRuntime());
 
-			bpResultRows.add(tmpBp);
 		}
-		helper = (BpHelper) shortestPath.get(shortestPath.size() - 1);
-		helperBp = helper.getBp();
-		bpResultRows.add(new ResultRow(helperBp.getId_betriebspunkt(), helperBp
-				.getBezeichnung(), helperBp.getAbkuerzung(), helperBp
-				.getBetriebspunkt_typ(), helperBp.getKoo_x(), helperBp
-				.getKoo_y(), 0L));
-		MainFrame.refreshResultPane(bpResultRows, greenBpList);
-		// MainFrame.refreshResultPane(bpResultRows);
-		getShortestDistanzToStart();
-		getRuntime();
-		// MainFrame.showRuntime(getRuntime());
 		return bpResultRows;
-
 	}
 
 	public void getWork(long start_id, long ziel_id, int modus) {
