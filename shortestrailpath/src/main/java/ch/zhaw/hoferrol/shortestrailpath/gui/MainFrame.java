@@ -408,7 +408,7 @@ public class MainFrame extends JFrame implements ActionListener { // implements
 		model.setRowCount(0);
 		for (ResultRow bp : bpResultRows) {
 			model.addRow(new Object[] { (bp.getBpAbk()), bp.getBpName(),
-					bp.getBpTyp(), bp.getDistToNext() });
+					bp.getBpTypKurz(), bp.getDistToNext() });
 		}
 
 		resultTable.setModel(model);

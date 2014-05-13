@@ -8,6 +8,8 @@ class ResultRow {
 	private String bp_abk;
 	private int bp_typ;
 	private String bp_typ_s;
+	private String bp_typkurz;
+	private String bp_typlang;
 	private float xKoo;
 	private String xKoo_s;
 	private float yKoo;
@@ -16,13 +18,16 @@ class ResultRow {
 	private String distToNext_s;
 
 	public ResultRow(long id_bp, String bp_name, String bp_abk, int bp_typ,
-			float xKoo, float yKoo, long distToNext) {
+			String bp_typkurz, String bp_typlang, float xKoo, float yKoo,
+			long distToNext) {
 		this.id_bp = id_bp;
 		this.id_bp_s = String.valueOf(id_bp);
 		this.bp_name = bp_name;
 		this.bp_abk = bp_abk;
 		this.bp_typ = bp_typ;
 		this.bp_typ_s = String.valueOf(bp_typ);
+		this.bp_typkurz = bp_typkurz;
+		this.bp_typlang = bp_typlang;
 		this.xKoo = xKoo;
 		this.xKoo_s = Float.toString(xKoo);
 		this.yKoo = yKoo;
@@ -53,6 +58,14 @@ class ResultRow {
 
 	public String getBpTyp_s() {
 		return bp_typ_s;
+	}
+
+	public String getBpTypKurz() {
+		return bp_typkurz;
+	}
+
+	public String getBpTypLang() {
+		return bp_typlang;
 	}
 
 	public float getxKoo() {

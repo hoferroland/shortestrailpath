@@ -40,6 +40,8 @@ public class BpHelper {
 	long distanzZumStart;
 	BpStatusEnum status;
 	BpHelper bpHelper;
+	String bpTypKurz;
+	String bpTypLang;
 	float iKoo;
 	float jKoo;
 	long airDistanzZumZiel;
@@ -52,6 +54,22 @@ public class BpHelper {
 	// Getter und Setter-Methoden
 	public BpHelper getBpHelper(Long id_bp) {
 		return bpHelper;
+	}
+
+	public void setBpTypKurz(String bpTypKurz) {
+		this.bpTypKurz = bpTypKurz;
+	}
+
+	public String getBpTypKurz() {
+		return bpTypKurz;
+	}
+
+	public void setBpTypLang(String bpTypLang) {
+		this.bpTypLang = bpTypLang;
+	}
+
+	public String getBpTypLang() {
+		return bpTypLang;
 	}
 
 	public void setNextBp(Betriebspunkt next) {
@@ -146,6 +164,24 @@ public class BpHelper {
 			Betriebspunkt bp = (Betriebspunkt) bpMap.get(key);
 			// erstelle neuen BpHelper mit Betriebspunkt als Uebergabeparameter
 			BpHelper h = new BpHelper(bp);
+			int typBp = bp.getBetriebspunkt_typ();
+			if ((typBp == 0) || (typBp == 2) || (typBp == 4)) {
+				h.setBpTypKurz("Bhf");
+				h.setBpTypLang("Bahnhof");
+			}
+			if ((typBp == 1) || (typBp == 3) || (typBp == 10)) {
+				h.setBpTypKurz("Dienst");
+				h.setBpTypLang("Dienstbahnhof/-betriebspunkt");
+			}
+			if ((typBp == 5) || (typBp == 6)) {
+				h.setBpTypKurz("Hst");
+				h.setBpTypLang("Haltestelle/Halt auf Verlangen");
+			}
+			if ((typBp == 7) || (typBp == 8) || (typBp == 9)) {
+				h.setBpTypKurz("Abzw");
+				h.setBpTypLang("Abzweigung/Spurwechsel");
+			}
+
 			// füge dem BpHelpter seine Liste von NachbarBetriebspunkten zu
 			h.setNextBpList(neighbourCalc.getNext(bp.getId_betriebspunkt()));
 			// füge jedem BpHelper seine bpHelperMap hinzu
