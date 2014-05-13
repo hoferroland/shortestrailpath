@@ -450,9 +450,16 @@ public class Dijkstra {
 
 			// Abbruch der Schlaufe, falls der 'Vorher'Betriebspunkt = dem
 			// 'start'BpHelper ist
-			if (ziel.getBpVorher().equals(start.bp)) { // /////// TODO Abfangen
-														// von Fehlern!!!
-				shortestPath.add(start);
+			if (ziel.getBpVorher() != null) {
+				if (ziel.getBpVorher().equals(start.bp)) { // /////// TODO
+															// Abfangen
+															// wenn 'ziel' kein
+															// bpVorher hat!!!
+					shortestPath.add(start);
+					break;
+				}
+			} else {
+				shortestPath.clear();
 				break;
 			}
 
