@@ -26,9 +26,9 @@ import ch.zhaw.hoferrol.shortestrailpath.topologie.BorderPoint;
 /**
  * Klasse GrafikView - Ist zuständig für die grafische Anzeige des
  * Suchresultates und wird über einen Button im Mainframe aufgerufen. Dabei wird
- * ein Anzeige- modus übergeben, welcher steuert, ob nur die gefundene
- * Verbindung oder auch alle durch den Algorithmus besuchten Betriebspunkte
- * geplottet werden sollen.
+ * ein Anzeigemodus übergeben, welcher steuert, ob nur die gefundene Verbindung
+ * oder auch alle durch den Algorithmus besuchten Betriebspunkte geplottet
+ * werden sollen.
  * 
  * @author Roland Hofer, V1.0 - 10.05.2014
  * 
@@ -36,13 +36,17 @@ import ch.zhaw.hoferrol.shortestrailpath.topologie.BorderPoint;
 
 public class GrafikView extends JFrame implements ActionListener {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4657107180500861400L;
 	// Variabeln
 	private static final Logger LOG = Logger.getLogger(GrafikView.class);
 	private JPanel myPanel, buttonPanel;
 	private JPanel drawPanel;
 	private JButton legendeButton;
 	private JButton schliessenButton;
-	private Graphics karte;
+	// private Graphics karte;
 	private int[] grafikSize = new int[4];
 	private List<BpHelper> shortestPath = new ArrayList<BpHelper>();
 	private List<BpHelper> greenBpList = new ArrayList<BpHelper>();
@@ -111,6 +115,9 @@ public class GrafikView extends JFrame implements ActionListener {
 	}
 
 	class GPanel extends JPanel {
+
+		private static final long serialVersionUID = 5967727182155656352L;
+
 		public GPanel() {
 			setPreferredSize(new Dimension(maxI, maxJ));
 			this.setBackground(Color.WHITE);
@@ -121,78 +128,34 @@ public class GrafikView extends JFrame implements ActionListener {
 		public void paintComponent(Graphics g) {
 			super.paintComponents(g);
 
+			// Bild für Startpunkt laden
 			BpHelper helper = null;
-			// Image start;
-			// ImageIcon istart = new ImageIcon(
-			// GrafikView.class.getResource("/startpunkt_klein.png"));
-			// start = istart.getImage();
-
-			// String starticon = "/startpunkt_klein.png";
-
 			ClassLoader clStart = this.getClass().getClassLoader();
-			System.out.println("Ausgabe clStart: " + clStart.getClass());
-
 			URL urlStart = clStart.getResource("startpunkt_klein.png");
-			System.out.println("Ausgabe urlStart: " + urlStart);
-			// InputStream streamStart = this.getClass().getResourceAsStream(
-			// starticon);
 			Image start = null;
-			// InputStream isStart =
-			// this.getClass().getResourceAsStream(starticon);
 			try {
 				start = ImageIO.read(urlStart);
-				// BufferedImage biStart = ImageIO.read(streamStart);
-				// start = biStart;
 			} catch (IOException eStart) {
-				// TODO Auto-generated catch block
+				// Auto-generated catch block
 				eStart.printStackTrace();
 			}
 
-			// String starticon = "/startpunkt_klein.png";
-			// ClassLoader clStart = Thread.currentThread()
-			// .getContextClassLoader();
-			// InputStream streamStart = clStart.getResourceAsStream(starticon);
-			// BufferedImage biStart = null;
-			// try {
-			// biStart = ImageIO.read(streamStart);
-			// } catch (IOException e) {
-			// // TODO Auto-generated catch block
-			// e.printStackTrace();
-			// }
-
-			// Image ziel;
-			// ImageIcon iziel = new ImageIcon(
-			// GrafikView.class.getResource("/zielpunkt_klein.png"));
-			// ziel = iziel.getImage();
-
-			// String zielicon = "/zielpunkt_klein.png";
-
+			// Bild für Zielpunkt laden
 			ClassLoader clZiel = this.getClass().getClassLoader();
-			System.out.println("Ausgabe clZiel: " + clZiel.getClass());
-
 			URL urlZiel = clZiel.getResource("zielpunkt_klein.png");
-			System.out.println("Ausgabe urlZiel: " + urlZiel);
-			// InputStream streamStart = this.getClass().getResourceAsStream(
-			// starticon);
 			Image ziel = null;
-			// InputStream isStart =
-			// this.getClass().getResourceAsStream(starticon);
 			try {
 				ziel = ImageIO.read(urlZiel);
-				// BufferedImage biStart = ImageIO.read(streamStart);
-				// start = biStart;
 			} catch (IOException eZiel) {
-				// TODO Auto-generated catch block
+				// Auto-generated catch block
 				eZiel.printStackTrace();
 			}
 
+			// Hintergrundfarbe für die Bilder 'start' und 'ziel' transparent
 			Color bgc = new Color(0f, 0f, 0f, .01f);
 
-			// Color cBp1 = new Color(255, 0, 0);
-			// Color cBp2 = new Color(0, 255, 0);
-
+			// Schweizerkarte mit den Gemeindegrenzen zeichnen
 			BorderPoint bpoint = null;
-			LOG.debug("Border-Size beträgt: " + border.size());
 
 			// Schlaufe für das Zeichnen der Schweizer-Karte
 			for (int iborder = 0; iborder < border.size(); iborder++) {
@@ -232,17 +195,18 @@ public class GrafikView extends JFrame implements ActionListener {
 				g.setColor(Color.RED);
 				g.drawOval((int) ixKoo, (int) jyKoo, 4, 4);
 				g.fillOval((int) ixKoo, (int) jyKoo, 4, 4);
+
+				// Startpunkt mit Namen beschriften sowie Bild setzen
 				if (i == 0) {
 					g.setColor(Color.BLACK);
 					g.setFont(new Font("default", Font.BOLD, 12));
 					g.drawString(helper.getBp().getBezeichnung(),
 							(int) (helper.getIKoo() - 3),
 							(int) (helper.getJKoo() - 10));
-					// g.drawImage(start, (int) helper.getIKoo(),
-					// (int) helper.getJKoo(), this);
 					g.drawImage(start, (int) helper.getIKoo(),
 							(int) helper.getJKoo(), bgc, this);
 				}
+				// Zielpunkt mit Namen beschriften sowie Bild setzen
 				if (i == (shortestPath.size() - 1)) {
 					g.setColor(Color.BLACK);
 					g.setFont(new Font("default", Font.BOLD, 12));

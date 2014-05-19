@@ -37,13 +37,18 @@ import ch.zhaw.hoferrol.shortestrailpath.algorithm.BpHelper;
 import ch.zhaw.hoferrol.shortestrailpath.algorithm.Dijkstra;
 import ch.zhaw.hoferrol.shortestrailpath.topologie.BorderPoint;
 
-public class MainFrame extends JFrame implements ActionListener { // implements
-																	// ActionListener,
-	// ItemListener {
+/**
+ * Klasse MainFrame - Hier wird der 'ShortestRailPath - Navigator' erstellt. Die
+ * Klasse wird vom GuiMainHandler aufgerufen und stellt den Hauptteil des
+ * UserInterface dar.
+ * 
+ * @author Roland Hofer, V1.8 - 18.05.2014
+ * 
+ */
 
-	/**
-	 * 
-	 */
+public class MainFrame extends JFrame implements ActionListener {
+
+	// Variabeln
 	private static final long serialVersionUID = 1L;
 	private static JPanel contentPane;
 	private static JPanel contentPaneLeft;
@@ -56,7 +61,6 @@ public class MainFrame extends JFrame implements ActionListener { // implements
 	private static JPanel contentPaneLeftTime;
 	private static JPanel contentPaneRightTop;
 	private static JPanel contentPaneRightTable;
-	private static JPanel contentPaneRightTableIcon;
 	private static JPanel contentPaneRightButton;
 	private static JPanel contentPaneRightBlank;
 	private static JMenuBar menuLeiste;
@@ -64,7 +68,6 @@ public class MainFrame extends JFrame implements ActionListener { // implements
 	private static JMenu menuInfo;
 	private static JMenuItem itemSchliessen;
 	private static JMenuItem itemInfo;
-	private static JLabel resultDistanz;
 	private static JRadioButton dijkstraNormal;
 	private static JRadioButton dijkstraOpt;
 	private static JRadioButton dijkstraAStern;
@@ -79,11 +82,9 @@ public class MainFrame extends JFrame implements ActionListener { // implements
 	private static JButton btnGo;
 	private static JButton btnGrafik;
 	List<Row> bhfRows = new ArrayList<Row>();
+	List<BorderPoint> border = new ArrayList<BorderPoint>();
 	private static JTable resultTable;
 	private static JLabel blank;
-	// private static JLabel logoLabel;
-	// private static Image logo;
-	// private static Image icon;
 	private static JScrollPane scroll;
 	private static String[] resultTableColumnNames;
 	private static Object[][] model;
@@ -92,45 +93,24 @@ public class MainFrame extends JFrame implements ActionListener { // implements
 	private Row zielRow = null;
 	private int modusAlgorithmus;
 	private int modusAnzeige;
-	private List<ResultRow> bpResultRows = new ArrayList<ResultRow>();
 	private JComboBox<Row> cbo_startHelper = new JComboBox<Row>();
 	private JComboBox<Row> cbo_zielHelper = new JComboBox<Row>();
 	private static final String LOGO_FILE_NAME = "/Logo.jpg";
 
-	// private List<BpHelper> greenBpList = new ArrayList<BpHelper>();
-
-	// private List<BpHelper> shortestPath = new ArrayList<BpHelper>();
-
 	/**
-	 * Launch the application.
-	 */
-	// public static void main(String[] args) {
-	// EventQueue.invokeLater(new Runnable() {
-	// public void run() {
-	// try {
-	// MainFrame frame = new MainFrame();
-	// frame.setVisible(true);
-	// } catch (Exception e) {
-	// e.printStackTrace();
-	// }
-	// }
-	// });
-	// }
-
-	/**
-	 * Create the frame.
+	 * Konstruktor
 	 */
 	public MainFrame(List<Row> bhfRows, List<BpHelper> shortestPath,
 			List<BorderPoint> border) {
-		// public MainFrame(List<Row> bhfRows) {
 
 		this.bhfRows = bhfRows;
-		// this.shortestPath = shortestPath;
+		this.border = border;
 
-		setTitle("shortestRailPath - Navigator");
+		setTitle("ShortestRailPath - Navigator");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1050, 600);
 
+		// Erstellen der Menüleiste
 		menuLeiste = new JMenuBar();
 		setJMenuBar(menuLeiste);
 		menuDatei = new JMenu("Datei");
@@ -145,17 +125,7 @@ public class MainFrame extends JFrame implements ActionListener { // implements
 		menuInfo.add(itemInfo);
 		itemInfo.addActionListener(this);
 
-		// JMenuBar menuBar = new JMenuBar();
-		// setJMenuBar(menuBar);
-		//
-		// JMenuItem mntmDatei = new JMenuItem("Datei");
-		// menuBar.add(mntmDatei);
-		//
-		// JMenuItem mntmGrafik = new JMenuItem("Grafik");
-		// menuBar.add(mntmGrafik);
-		//
-		// JMenuItem mntmInfo = new JMenuItem("Info");
-		// menuBar.add(mntmInfo);
+		// Erstellung der Panels
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -197,7 +167,6 @@ public class MainFrame extends JFrame implements ActionListener { // implements
 		contentPaneLeft.add(contentPaneLeftTime);
 
 		contentPaneRightTop.setLayout(new FlowLayout());
-		// contentPaneRightTable.setLayout(new GridLayout(1, 1));
 		contentPaneRightTable.setLayout(new BorderLayout());
 		contentPaneRightButton.setLayout(new BorderLayout());
 
@@ -205,6 +174,7 @@ public class MainFrame extends JFrame implements ActionListener { // implements
 		contentPaneRight.add(contentPaneRightTable);
 		contentPaneRight.add(contentPaneRightButton);
 
+		// Bezeichnungs- und Dropdownfeld 'Ausgangsbahnhof'
 		JLabel lblStartHelper = new JLabel("Ausgangsbahnhof:");
 		lblStartHelper.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblStartHelper.setBounds(10, 47, 238, 21);
@@ -216,10 +186,10 @@ public class MainFrame extends JFrame implements ActionListener { // implements
 				startRow = selectedItem;
 			}
 		});
-
 		cbo_startHelper.setBounds(10, 79, 238, 29);
 		contentPaneLeftStart.add(cbo_startHelper);
 
+		// Bezeichnungs- und Dropdownfeld 'Zielbahnhof'
 		JLabel lblZielHelper = new JLabel("Zielbahnhof:");
 		lblZielHelper.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblZielHelper.setBounds(10, 149, 238, 21);
@@ -229,8 +199,6 @@ public class MainFrame extends JFrame implements ActionListener { // implements
 			public void itemStateChanged(ItemEvent e) {
 				Row selectedItem = (Row) cbo_zielHelper.getSelectedItem();
 				zielRow = selectedItem;
-				// System.out.println("ZielHelper = " + zielRow.getId());
-
 			}
 		});
 		cbo_zielHelper.setBounds(10, 181, 238, 29);
@@ -254,6 +222,7 @@ public class MainFrame extends JFrame implements ActionListener { // implements
 
 		contentPaneLeftModus.add(box);
 
+		// Feld zur Anzeige der Laufzeit
 		runTime = new JTextField();
 		runTime.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		runTime.setEditable(false);
@@ -261,21 +230,22 @@ public class MainFrame extends JFrame implements ActionListener { // implements
 		runTime.setVisible(true);
 		runTime.setBorder(null);
 
-		// Beschriftungsfeld für aktiviertes Kontrollkäs
-
 		Component verticalStrut = Box.createVerticalStrut(20);
 		verticalStrut.setBounds(321, 11, 1, 410);
-		contentPaneLeft.add(verticalStrut);
+		contentPaneLeftModus.add(verticalStrut);
 
+		// Trennlinie oberhalb des Laufzeitfeldes
 		JSeparator separator = new JSeparator();
 		separator.setForeground(Color.GRAY);
 		separator.setBounds(310, 11, 1, 376);
 		contentPaneLeftTime.add(separator, BorderLayout.NORTH);
 
+		// Trennlinie unterhalb des Laufzeitfeldes
 		JSeparator separator_1 = new JSeparator();
 		separator_1.setBounds(10, 299, 300, 2);
 		contentPaneLeftTime.add(separator_1, BorderLayout.SOUTH);
 
+		// Button um Suche zu starten
 		btnGo = new JButton("Suche starten");
 		btnGo.setBounds(134, 247, 114, 23);
 		contentPaneLeftButton.add(btnGo);
@@ -296,6 +266,7 @@ public class MainFrame extends JFrame implements ActionListener { // implements
 			}
 		});
 
+		// Feld um Gesamtdistanz des gefundenen Weges anzuzeigen
 		distanzStart = new JTextField();
 		distanzStart.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		distanzStart.setEditable(false);
@@ -303,43 +274,35 @@ public class MainFrame extends JFrame implements ActionListener { // implements
 		distanzStart.setVisible(true);
 		distanzStart.setBorder(null);
 
-		// resultTable = new JTable();
-		// Object o[] = new Object[] { "Bp-Abk.", "Bp-Name", "Bp-Typ", "Distanz"
-		// };
-		// resultTable.setModel(new DefaultTableModel());
-		//
-		// resultTable.setBounds(366, 26, 408, 346);
-		// contentPane.add(new JScrollPane(resultTable));
-
+		// Anzeige der Abfolge von Betriebspunkten des gefundenen Weges in
+		// einer Tabelle
 		resultTable = new JTable(new DefaultTableModel(model, new Object[] {
 				"Bp-Abk.", "Bp-Name", "Bp-Typ", "Distanz" }) {
+
+			private static final long serialVersionUID = -1867719985967119185L;
+
 			public boolean isCellEditable(int row, int column) {
 				return false;
 			}
 		});
 		resultTable.setBounds(366, 26, 280, 346);
-		// resultTable.setBounds(366, 26, 408, 346);
 		resultTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		scroll = new JScrollPane(resultTable);
 		TableColumnAdjuster tca = new TableColumnAdjuster(resultTable);
 
-		/*
-		 * PW JViewport view = new JViewport() { public void
-		 * paintComponent(Graphics g) { logo = getLogo(); g.drawImage(logo, 0,
-		 * 0, getWidth(), getHeight(), this); } }; view.add(resultTable);
-		 * scroll.setViewport(view);
-		 */
 		blank = new JLabel(" ");
 		blank.setFont(new Font("Tahoma", Font.PLAIN, 86));
 		contentPaneRightBlank.add(blank, BorderLayout.CENTER);
 		contentPaneRightTable.add(contentPaneRightBlank, BorderLayout.CENTER);
 
+		// Anzeige des Logo's (wenn noch keine Suchanfrage gestartet wurde)
 		JLabel imageLabel = new JLabel("", new ImageIcon(getClass()
 				.getResource(LOGO_FILE_NAME)), JLabel.CENTER);
 		JPanel logoPanel = new JPanel(new BorderLayout());
 		logoPanel.add(imageLabel, BorderLayout.SOUTH);
 		contentPaneRightTable.add(logoPanel, BorderLayout.SOUTH);
 
+		// Option zur grafischen Anzeige des kürzesten Weges
 		anzeigeWeg = new JRadioButton("Nur Anzeige befahrene Betriebspunkte",
 				true);
 		anzeigeBearbeitet = new JRadioButton(
@@ -356,6 +319,7 @@ public class MainFrame extends JFrame implements ActionListener { // implements
 		contentPaneRightButton.add(boxAnzeige, BorderLayout.WEST);
 		boxAnzeige.setVisible(false);
 
+		// Button um grafische Anzeige zu öffnen
 		btnGrafik = new JButton("Grafische Darstellung");
 		btnGrafik.setBounds(366, 383, 165, 23);
 		contentPaneRightButton.add(btnGrafik, BorderLayout.EAST);
@@ -371,14 +335,12 @@ public class MainFrame extends JFrame implements ActionListener { // implements
 				GrafikView grafik = new GrafikView(GuiMainHandler.shortestPath,
 						GuiMainHandler.border, GuiMainHandler.greenBpList,
 						modusAnzeige);
-				// grafik.karte = grafik.drawPanel.getGraphics();
-				// grafik.setVisible(true);
-
 			}
 		});
 		btnGrafik.setVisible(false);
 
-		// data
+		// Zuweisung der selektierten Bahnhöfe an die Variabeln für
+		// den start- und ziel Helper
 		for (Row bhf : bhfRows) {
 			cbo_zielHelper.addItem(bhf);
 			cbo_startHelper.addItem(bhf);
@@ -386,23 +348,12 @@ public class MainFrame extends JFrame implements ActionListener { // implements
 
 	}
 
-	public static void getResult(List<ResultRow> bpResultRows) {
-
-	}
-
+	// Methode um Tabelle mit Suchresultat zu befüllen
 	public static void refreshResultPane(List<ResultRow> bpResultRows,
 			List<BpHelper> greenBpList) {
-		bpResultRows = bpResultRows;
-		// greenBpList = greenBpList;
-		System.out.println("Grösse greenBpList in MainFrame = "
-				+ greenBpList.size());
-		// for (ResultRow bp : bpResultRows) {
-		// result = (new String[] { (bp.getBpAbk()), bp.getBpName(),
-		// bp.getBpTyp_s(), bp.getDistToNext_s() });
-		// }
+
 		DefaultTableModel model = null;
 		model = (DefaultTableModel) resultTable.getModel();
-		// DefaultTableModel model = (DefaultTableModel) resultTable.getModel();
 		// zuerst Tabelleninhalt löschen (falls 'alte' Abfrageresultate
 		// drinstehen
 		model.setRowCount(0);
@@ -414,22 +365,10 @@ public class MainFrame extends JFrame implements ActionListener { // implements
 		resultTable.setModel(model);
 		contentPaneRightTable.removeAll();
 		contentPaneRightTable.add(scroll);
-		// icon = null;
-		// logo = null;
 		scroll.setVisible(true);
 
-		// contentPaneRightTable.revalidate();
-		// contentPaneRight.repaint();
-
-		/*
-		 * resultTable = new JTable(new DefaultTableModel(model, new Object[] {
-		 * "Bp-Abk.", "Bp-Name", "Bp-Typ", "Distanz" })); // JScrollPane scroll
-		 * = new JScrollPane(resultTable); // resultTable.setBounds(366, 26,
-		 * 408, // 346);
-		 */
 		resultTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		TableColumnAdjuster tca = new TableColumnAdjuster(resultTable);
-		// contentPane.add(resultTable);
 
 		resultTableColumnNames = new String[] { "Bp-Abk.", " Bp-Bezeichnung",
 				" Bp-Typ", "Distanz" };
@@ -439,6 +378,7 @@ public class MainFrame extends JFrame implements ActionListener { // implements
 
 	}
 
+	// Methode um Gesamtdistanz anzuzeigen
 	public static void showDistanzStart(String gesamtDistanz) {
 		distanzStart.setText("Die Länge des kürzesten Weges beträgt: "
 				+ gesamtDistanz + " Kilometer.");
@@ -450,6 +390,7 @@ public class MainFrame extends JFrame implements ActionListener { // implements
 
 	}
 
+	// Methode um Laufzeit anzuzeigen
 	public static void showRuntime(float getRunTime) {
 		runTime.setText("Die Laufzeit der Wegsuche betrug: "
 				+ (String.valueOf(getRunTime)) + " Millisekunden.");
@@ -460,16 +401,6 @@ public class MainFrame extends JFrame implements ActionListener { // implements
 		contentPane.revalidate();
 
 	}
-
-	// public void itemStateChanged(ItemEvent sc) {
-	// if (sc.getSource() == this.cbo_startHelper) {
-	// Row selectedItem = (Row) cbo_startHelper.getSelectedItem();
-	// startRow = selectedItem;
-	// } else if (sc.getSource() == this.cbo_zielHelper) {
-	// Row selectedItem = (Row) cbo_zielHelper.getSelectedItem();
-	// zielRow = selectedItem;
-	// }
-	// }
 
 	@Override
 	public void actionPerformed(ActionEvent object) {

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<class-diagram version="1.1.5" icons="true" always-add-relationships="false" generalizations="true" realizations="true" 
-  associations="true" dependencies="false" nesting-relationships="true">  
+<class-diagram version="1.1.5" icons="true" automaticImage="PNG" always-add-relationships="false" generalizations="true" 
+  realizations="true" associations="true" dependencies="false" nesting-relationships="true">  
   <class id="1" language="java" name="ch.zhaw.hoferrol.shortestrailpath.topologie.Betriebspunkt" 
     project="shortestrailpath" 
     file="/shortestrailpath/src/main/java/ch/zhaw/hoferrol/shortestrailpath/topologie/Betriebspunkt.java" binary="false" 
@@ -101,74 +101,74 @@
     </display>  
   </class>  
   <association id="10">    
-    <end type="SOURCE" refId="9" navigable="false">      
-      <attribute id="11" name="border"/>      
+    <bendpoint x="804" y="560"/>    
+    <bendpoint x="804" y="479"/>    
+    <bendpoint x="804" y="344"/>    
+    <end type="SOURCE" refId="5" navigable="false">      
+      <attribute id="11" name="bpVerbMap"/>      
       <multiplicity id="12" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="8" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="13">    
-    <bendpoint x="84" y="403"/>    
-    <end type="SOURCE" refId="3" navigable="false">      
-      <attribute id="14" name="bpList"/>      
-      <multiplicity id="15" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="1" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="16">    
-    <bendpoint x="514" y="369"/>    
-    <end type="SOURCE" refId="4" navigable="false">      
-      <attribute id="17" name="bpVerbList"/>      
-      <multiplicity id="18" minimum="0" maximum="2147483647"/>    
     </end>    
     <end type="TARGET" refId="2" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="19">    
-    <bendpoint x="640" y="376"/>    
+  <association id="13">    
+    <bendpoint x="514" y="369"/>    
     <end type="SOURCE" refId="4" navigable="false">      
-      <attribute id="20" name="hashBpVerb"/>      
+      <attribute id="14" name="bpVerbList"/>      
+      <multiplicity id="15" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="2" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="16">    
+    <bendpoint x="354" y="514"/>    
+    <end type="SOURCE" refId="5" navigable="false">      
+      <attribute id="17" name="bpMap"/>      
+      <multiplicity id="18" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="1" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="19">    
+    <bendpoint x="342" y="761"/>    
+    <bendpoint x="342" y="398"/>    
+    <end type="SOURCE" refId="7" navigable="false">      
+      <attribute id="20" name="bpVerbList"/>      
       <multiplicity id="21" minimum="0" maximum="2147483647"/>    
     </end>    
     <end type="TARGET" refId="2" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <association id="22">    
-    <bendpoint x="342" y="761"/>    
-    <bendpoint x="342" y="398"/>    
-    <end type="SOURCE" refId="7" navigable="false">      
-      <attribute id="23" name="bpVerbList"/>      
+    <end type="SOURCE" refId="9" navigable="false">      
+      <attribute id="23" name="border"/>      
       <multiplicity id="24" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="8" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="25">    
+    <bendpoint x="640" y="376"/>    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="26" name="hashBpVerb"/>      
+      <multiplicity id="27" minimum="0" maximum="2147483647"/>    
     </end>    
     <end type="TARGET" refId="2" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="25">    
-    <bendpoint x="184" y="405"/>    
+  <association id="28">    
+    <bendpoint x="84" y="403"/>    
     <end type="SOURCE" refId="3" navigable="false">      
-      <attribute id="26" name="hashBp"/>      
-      <multiplicity id="27" minimum="0" maximum="2147483647"/>    
+      <attribute id="29" name="bpList"/>      
+      <multiplicity id="30" minimum="0" maximum="2147483647"/>    
     </end>    
     <end type="TARGET" refId="1" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="28">    
-    <bendpoint x="804" y="560"/>    
-    <bendpoint x="804" y="479"/>    
-    <bendpoint x="804" y="344"/>    
-    <end type="SOURCE" refId="5" navigable="false">      
-      <attribute id="29" name="bpVerbMap"/>      
-      <multiplicity id="30" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="2" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
   <association id="31">    
-    <bendpoint x="354" y="514"/>    
-    <end type="SOURCE" refId="5" navigable="false">      
-      <attribute id="32" name="bpMap"/>      
+    <bendpoint x="184" y="405"/>    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="32" name="hashBp"/>      
       <multiplicity id="33" minimum="0" maximum="2147483647"/>    
     </end>    
     <end type="TARGET" refId="1" navigable="true"/>    

@@ -24,7 +24,6 @@ public class XMLBetriebspunkteImport {
 		importUrl = url;
 	}
 
-	// public static void main(String[] args) {
 	public List<Betriebspunkt> xmlBpImport() {
 
 		List<Betriebspunkt> bpList = new ArrayList<Betriebspunkt>();
@@ -32,50 +31,22 @@ public class XMLBetriebspunkteImport {
 		Document doc = null;
 		List<Element> alleKinder;
 
-		// String fileName = System.getProperty("bpFile");
-		// File f = new File("d:\\uno_betriebspunkt.xml");
-
-		// File f = new File(DEFAULT_BP_FILE_NAME);
-		// URL fileUrl = f.toURI().toURL();
-		//
-		// if (!f.canRead()) {
-		// throw new IllegalArgumentException("datei " + DEFAULT_BP_FILE_NAME
-		// + " zum einlesen der betriebspunkte wurde nicht gefunden!");
-		// }
-		//
-		// URL url = this.getClass().getResource("/" + DEFAULT_BP_FILE_NAME);
-
 		try {
 			// Das Dokument erstellen
 			SAXBuilder builder = new SAXBuilder();
 			doc = builder.build(importUrl);
 			XMLOutputter fmt = new XMLOutputter();
 
-			// komplettes Dokument ausgeben
-			// fmt.output(doc, System.out);
-
 			// Wurzelelement ausgeben
 			Element element = doc.getRootElement();
-			// System.out.println("\nWurzelelement: " + element);
-
-			// Wurzelelementnamen ausgeben
-			// System.out.println("Wurzelelementname: " + element.getName());
 
 			// Eine Liste aller direkten Kindelemente eines Elementes erstellen
 			alleKinder = element.getChildren();
-			// System.out.println("Erstes Kindelement: "
-			// + ((Element) alleKinder.get(0)).getName());
-			// System.out.println("Liste aller Kinder: " + alleKinder.size());
 
 			// Attribut ausgeben
 			Element kind = element.getChild("ROW");
 			List<Element> columns = kind.getChildren();
-			// for (Element col : columns) {
-			// System.out.println(col.getAttributeValue("NAME") + ": "
-			// + col.getValue());
 
-			// }
-			// Iteration über alle Attribute
 			int i;
 			Float xKoo = null;
 			Float yKoo = null;
@@ -108,13 +79,13 @@ public class XMLBetriebspunkteImport {
 				} else {
 					yKoo = 1.1f;
 				}
+
 				if ((columns1.get(6).getText()) != "") {
 					uic = Integer.parseInt(columns1.get(6).getText());
 				} else {
 					uic = 80;
 				}
 
-				// .getAttributeValue("ID_BETRIEBSPUNKT"));
 				Betriebspunkt bp = new Betriebspunkt(abkuerzung, name, idBP,
 						bpTyp, xKoo, yKoo, uic);
 				bpList.add(bp);

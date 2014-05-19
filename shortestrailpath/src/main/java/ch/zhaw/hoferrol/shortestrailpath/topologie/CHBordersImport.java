@@ -35,10 +35,9 @@ public class CHBordersImport {
 			int i = 0;
 
 			while ((zeile = reader.readLine()) != null) {
-				// System.out.println(zeile);
+
 				Matcher matcher = REGEX_LIPT.matcher(zeile);
 				if (matcher.matches()) {
-					// System.out.println(zeile);
 
 					String first = matcher.group(1);
 					String second = matcher.group(2);
@@ -58,7 +57,6 @@ public class CHBordersImport {
 					}
 					i++;
 				}
-				// LIPT 645809.626 267404.925 289.451
 
 			}
 			reader.close();
@@ -68,8 +66,9 @@ public class CHBordersImport {
 			throw new IllegalStateException(
 					"Datei nicht gefunden, sollte aber da sein.", ex);
 		}
-		LOG.info("Die Grösse der BorderPoint List 'border' beträgt: "
+		LOG.info("Die Groesse der BorderPoint List 'border' betraegt: "
 				+ border.size());
+
 		return border;
 	}
 

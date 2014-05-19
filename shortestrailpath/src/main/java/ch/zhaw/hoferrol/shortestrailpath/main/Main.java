@@ -33,8 +33,6 @@ public class Main {
 	static BpHelper startHelper;
 	static BpHelper zielHelper;
 	private static Map<Long, BpHelper> helperMap = new HashMap<Long, BpHelper>();
-
-	private static List<BpHelper> shortestPath = new ArrayList<BpHelper>();
 	private static final String INTERNAL_BP_FILE_NAME = "betriebspunkte_internal.xml";
 	private static final String EXTERNAL_BP_FILE_NAME = "betriebspunkte.xml";
 	private static final String INTERNAL_BPVerb_FILE_NAME = "betriebspunktverbindungen_internal.xml";
@@ -43,7 +41,7 @@ public class Main {
 	private static final String CHBORDER_FILE_NAME = "/CHBorders.txt";
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+
 		URL bpImportUrl = getBpImportUrl();
 		XMLBetriebspunkteImport xmlBpImp = new XMLBetriebspunkteImport(
 				bpImportUrl);

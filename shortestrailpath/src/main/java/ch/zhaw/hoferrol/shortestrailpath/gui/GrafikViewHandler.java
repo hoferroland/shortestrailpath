@@ -44,8 +44,8 @@ public class GrafikViewHandler {
 	private int iKooMin;
 	private int jKooMax;
 	private int jKooMin;
-	private int[] grafiksize = new int[3];
 
+	// Konstruktor
 	public GrafikViewHandler(List<BpHelper> shortestpath,
 			List<BpHelper> greenBpList, List<BorderPoint> border,
 			int[] grafiksize) {
@@ -81,6 +81,8 @@ public class GrafikViewHandler {
 			helperBildschirmKooUmrechner(i, kooHelper);
 		}
 
+		// Koordinatenumrechnung für Grenzpunkte (Schweizer-Karte) von
+		// LV03 auf Bildschirmkoordinaten
 		for (int iborder = 0; iborder < (border.size()); iborder++) {
 			borderpoint = (BorderPoint) border.get(iborder);
 			xKoo = borderpoint.getKooX();
@@ -102,6 +104,7 @@ public class GrafikViewHandler {
 
 	}
 
+	// Koordinatenumrechnung von LV03 auf Bildschirmkoordinaten für BpHelper
 	private void helperBildschirmKooUmrechner(int i, BpHelper kooHelper) {
 		float xKoo;
 		float yKoo;

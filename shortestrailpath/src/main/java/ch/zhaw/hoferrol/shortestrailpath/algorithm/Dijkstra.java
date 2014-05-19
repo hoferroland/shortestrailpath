@@ -3,7 +3,6 @@ package ch.zhaw.hoferrol.shortestrailpath.algorithm;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -58,8 +57,6 @@ public class Dijkstra {
 	private Set<BetriebspunktVerbindungen> shortestBpVerbList;
 	private List<BpHelper> shortestPath = new ArrayList<BpHelper>();
 	private BpHelper zielBpHelper;
-	private BpHelper nextBpHelper;
-	private BpHelper nextHelper;
 	private BpHelper nachbarBpHelper;
 	// Instanzvariabel der Klasse ASternHeuristikHelper
 	private ASternHeuristikHelper aSternHeuristikHelper;
@@ -73,14 +70,15 @@ public class Dijkstra {
 		redBpList = new ArrayList<BpHelper>();
 		yellowBpList = new ArrayList<BpHelper>();
 		greenBpList = new ArrayList<BpHelper>();
-		shortestBpList = new ArrayList<BpHelper>();
-		shortestBpVerbList = new HashSet<BetriebspunktVerbindungen>();
+
+		// shortestBpList = new ArrayList<BpHelper>();
+		// shortestBpVerbList = new HashSet<BetriebspunktVerbindungen>();
 		// Instanzierung ASternHeuristikHelper
 		aSternHeuristikHelper = new ASternHeuristikHelper(bpHelperMap);
 
 		// Iterator über alle BpHelper. Dabei wird der Status
 		// aller BpHelper zu 'rot' gesetzt
-		Iterator it = allBpMap.keySet().iterator();
+		Iterator<Long> it = allBpMap.keySet().iterator();
 		while (it.hasNext()) {
 			Object key = (Object) it.next();
 			BpHelper helper = (BpHelper) allBpMap.get(key);
@@ -178,14 +176,16 @@ public class Dijkstra {
 	// laufen und zu den jeweiligen BpHelpern der 'optimale' Vorgänger sowie
 	// die Distanz zum Start-BpHelper ermittelt.
 	// Der Methode werden folgende Parameter übergeben
-	// - HashMap mit allen BetriebspunktVerbindungen (key = id_BpVerbindung)
 	// - BpHelper welcher als Startpunkt übergeben wird
+	// - BpHelper welcher als Zielpunkt übergeben wird
 	// - HashMap mit allen BpHelpern (key = id_BpHelper = id_Betriebspunkt)
-	public List<BpHelper> work(Map<Long, BetriebspunktVerbindungen> graph,
-			BpHelper bpHelperStart, BpHelper zielHelper, int modus,
-			Map<Long, BpHelper> allBpMap) {
 
+	public List<BpHelper> work(BpHelper bpHelperStart, BpHelper zielHelper,
+			int modus, Map<Long, BpHelper> allBpMap) {
+
+		// Startmesspunkt für Messung Algorithmus
 		startZeitDijkstraWork = System.nanoTime();
+
 		LOG.info("Dijkstra mit Modus " + modus + " gestartet");
 
 		this.zielBpHelper = zielHelper;
@@ -204,14 +204,12 @@ public class Dijkstra {
 
 			// Abbruch der Schleife, wenn redBpList bzw. yellowBpList leer ist
 			// sprich alle BpHelper besucht wurden
-			if (redBpList.size() == 0) {
-				break;
-			}
-			if (yellowBpList.size() == 0) {
+			if ((redBpList.size() == 0) || (yellowBpList.size() == 0)) {
 				break;
 			}
 
-			// ArrayList 'yellowBpList' sortieren nach Distanz
+			// ArrayList 'yellowBpList' sortieren nach Distanz.
+			// Sortiermethode je nach ausgewähltem Modus
 			if (modus == MODUS_CLASSIC || modus == MODUS_OPTIMIERT) {
 				Collections.sort(yellowBpList, sortByDistanz);
 			} else if (modus == MODUS_ASTERN) {
@@ -223,19 +221,13 @@ public class Dijkstra {
 			// für den nächsten Schleifendurchlauf
 			BpHelper aktuellerBP = yellowBpList.get(0);
 
-			// Ausgabe des nextBp (neuen AusgangsBpHelper für den nächsten
-			// Schleifendurchlauf) auf Konsole
-			// (Test und Debug)
-			// LOG.debug("-----------------------------------------");
-			// LOG.debug("Roter BpHelper mit kleinster Distanz: "
-			// + nextBp.getBp().getBezeichnung() + ", ("
-			// + nextBp.getBp().getAbkuerzung() + ")");
-
-			// Wechsle den neuen AusgangsBpHelper (nextBp) zu grün
+			// Wechsle den neuen AusgangsBpHelper (aktuellerBp) zu grün
 			changeBpToGreen(aktuellerBP);
 
-			// Für alle NachfolgeBetriebspunkte (next2) von nextBp mache
+			// Für alle NachfolgeBetriebspunkte (nachbarBp) von aktuellerBp
+			// mache
 			for (Betriebspunkt nachbarBp : aktuellerBP.getNext()) {
+				// Abbruchbedingung falls kein nachbarBp vorhanden ist
 				if (aktuellerBP.getNext().size() == 0) {
 					break;
 				}
@@ -258,38 +250,36 @@ public class Dijkstra {
 					break;
 				}
 
-				// Ausgabe des neuen 'next2'Betriebspunktes auf Konsole
-				// (Test und Debug)
-				// LOG.debug("Nächster Betriebspunkt: "
-				// + next2Helper.bp.getAbkuerzung());
-
-				// berechne Distanz zwischen 'nachbarBp' und 'aktuellerBp'
+				// berechne Distanz zwischen 'aktuellerBp' und 'nachbarBp'
 				long distanzBpHelperVonZu = NeighbourCalculator.getDistanz(
 						aktuellerBP.bp.getId_betriebspunkt(),
 						nachbarBpHelper.bp.getId_betriebspunkt());
 
-				// Ausgabe der eruierten Distanz zwischen 'next2' und 'nextBp'
-				// auf Konsole
-				// (Test und Debug)
+				// Ausgabe der eruierten Distanz zwischen 'aktuellerBp' und
+				// 'nachbarBp' auf Konsole
 				LOG.debug("Distanz von : " + aktuellerBP.bp.getAbkuerzung()
 						+ " nach: " + nachbarBpHelper.bp.getAbkuerzung()
-						+ " beträgt: " + distanzBpHelperVonZu);
+						+ " betraegt: " + distanzBpHelperVonZu);
 
 				// Addiere neu eruierte Distanz zu bereits bestehender Distanz
-				// vom 'start'BpHelper zum 'nextBp'-BpHelper.
+				// vom 'aktuellerBp'BpHelper
 				long tmpDistanz = (aktuellerBP.getDistanzZumStart() + distanzBpHelperVonZu);
 
 				// Ausgabe einer Warnmeldung auf der Konsole, falls neu
-				// berechnete Distanz
-				// grösser dem max-Wert ist
-				// (Test und Debug)
+				// berechnete Distanz grösser dem max-Wert ist
 				if (tmpDistanz >= Integer.MAX_VALUE) {
-					LOG.debug("Achtung hier stimmt was nicht!");
+					LOG.debug("Achtung hier stimmt was nicht! - AktuellerBp: "
+							+ aktuellerBP.getBp().getId_betriebspunkt() + ", "
+							+ aktuellerBP.getBp().getAbkuerzung()
+							+ " tmpDistanz: " + tmpDistanz
+							+ " grösser als maxWert!");
 				}
 
 				// Falls die neu berechnete Distanz (tmpDistanz) kleiner ist
-				// als die next2-Distanz, setze die neue Distanz und den
-				// Vorgänger beim 'next2'-BpHelper ein
+				// als die nachbarBpHelper-Distanz, setze die neue Distanz und
+				// den
+				// Vorgänger beim 'nachbarBpHelper' ein und nehme den
+				// wechsle ihn auf gelb
 				if (tmpDistanz <= nachbarBpHelper.getDistanzZumStart()) {
 					nachbarBpHelper.setDistanzZumStart(tmpDistanz);
 					nachbarBpHelper.setBpVorher(aktuellerBP.bp);
@@ -298,12 +288,6 @@ public class Dijkstra {
 
 					changeBpToYellow(nachbarBpHelper, modus);
 
-					// Ausgabe des Schleifenzählers, des Betriebspunktes 'next2
-					// sowie des
-					// BpHelpers 'nextBp'
-					// (Test und Debug)
-					// System.out.println("i: " + i + ", nextw: " + next2Helper
-					// + ", nextBp: " + nextBp.bp.getAbkuerzung());
 				}
 
 			}
@@ -311,8 +295,7 @@ public class Dijkstra {
 			// Modus 1 = Dijksta Opt; Modus 2 = AStern
 			// Abbruchbedingung für Dijkstra Opt und AStern
 			// Wenn ZielHelperKnoten erreicht ist, wird aufgehört den Graphen
-			// weiter
-			// durchzusteppen.
+			// weiter durchzusteppen.
 			if ((modus == MODUS_OPTIMIERT || modus == MODUS_ASTERN)
 					&& aktuellerBP.bp.getId_betriebspunkt() == zielHelper.bp
 							.getId_betriebspunkt()) {
@@ -320,20 +303,6 @@ public class Dijkstra {
 			}
 
 		}
-
-		// Alle BpHelper mit ihrem 'optimalen' Vorgänger und der Entfernung zum
-		// Start auf Konsole ausgeben
-		// (Test und Debug)
-		// System.out.println("Betriebspunkt - Vorgänger - Entfernung");
-		//
-		// Iterator ite = allBpMap.keySet().iterator();
-		// while (ite.hasNext()) {
-		// Object key = (Object) ite.next();
-		// BpHelper helperPrint = (BpHelper) allBpMap.get(key);
-		// System.out.println(helperPrint.bp.getAbkuerzung() + "     -      "
-		// + helperPrint.getBpVorher().getAbkuerzung()
-		// + "      -      " + helperPrint.getDistanzZumStart());
-		// }
 
 		// Alle roten BpHelper auf Konsole ausgeben (sollte nach Durchlaufen von
 		// Dijkstra immer 'alle besucht' kommen.
@@ -356,13 +325,11 @@ public class Dijkstra {
 		// BpHelper
 		// sein nach Durchlaufen von Dijkstra.
 		// Falls keine grünen Punte, 'leer' ausgeben
-		// (Test und Debug)
-
 		LOG.debug("Grüne Betriebspunkte");
 		if (greenBpList.size() == 0) {
 			LOG.debug("-- leer --");
 		}
-		LOG.debug("Folgende 'grüne' Betriebspunkte besucht");
+		LOG.debug("Folgende 'gruene' Betriebspunkte besucht");
 		if (modus == MODUS_OPTIMIERT || modus == MODUS_ASTERN) {
 			for (BpHelper green : greenBpList) {
 				LOG.debug(green.bp.getAbkuerzung() + ", "
@@ -370,7 +337,6 @@ public class Dijkstra {
 			}
 		}
 		// Ausgabe auf Konsole von BpHelpern welche keinen Vorgänger haben
-		// (Test und Debug)
 		if (modus == 0) {
 			Iterator<Long> iterator = allBpMap.keySet().iterator();
 			while (iterator.hasNext()) {
@@ -379,7 +345,7 @@ public class Dijkstra {
 				if (helperVorg.getBpVorher() != null) {
 				} else {
 					LOG.debug(helperVorg.bp.getAbkuerzung() + ", "
-							+ " hat keinen Vorgänger!");
+							+ " hat keinen Vorgaenger! - Topologie pruefen");
 				}
 			}
 		}
@@ -391,7 +357,7 @@ public class Dijkstra {
 	}
 
 	private void initialisierenStartKnoten(BpHelper bpHelperStart) {
-		// Der Status des Startpunktes wird true gesetzt (=grün)
+		// Der Status des Startpunktes wird true gesetzt (=gelb)
 		// changeBpToGreen(bpHelperStart);
 		// Die Distanz zu seinem Vorgänger wird zu 0 gesetzt
 		bpHelperStart.setDistanzZumStart(0L);
@@ -425,7 +391,7 @@ public class Dijkstra {
 				// (Test und Debug) Ausgabe von gelöschten BpHelpern auf der
 				// Konsole
 				LOG.debug("BpHelper ohne Nachbar: " + helper.bp.getAbkuerzung()
-						+ " wurde gelöscht");
+						+ " wurde geloescht");
 			}
 		}
 	}
@@ -434,7 +400,7 @@ public class Dijkstra {
 	// und BpHelper 'ziel'
 	public List<BpHelper> getShortestPath(BpHelper start, BpHelper ziel) {
 		startZeitShortestPath = System.nanoTime();
-		LOG.info("Kürzester Weg von " + start.bp.getBezeichnung() + " nach "
+		LOG.info("Kuerzester Weg von " + start.bp.getBezeichnung() + " nach "
 				+ ziel.bp.getBezeichnung() + ":");
 		shortestPath.clear();
 
@@ -448,13 +414,12 @@ public class Dijkstra {
 
 		for (int i = 0; i < maximalRuns; i++) {
 
-			// Abbruch der Schlaufe, falls der 'Vorher'Betriebspunkt = dem
-			// 'start'BpHelper ist
+			// Prüfen ob der 'ziel'BpHelper einen Vorgänger hat, falls nein wird
+			// Liste 'shortestPath' geleert und eine leere Liste übergeben.
 			if (ziel.getBpVorher() != null) {
-				if (ziel.getBpVorher().equals(start.bp)) { // /////// TODO
-															// Abfangen
-															// wenn 'ziel' kein
-															// bpVorher hat!!!
+				// Abbruch der Schlaufe falls der 'vorher'Betriebspunkt =
+				// dem 'start'BpHelper ist.
+				if (ziel.getBpVorher().equals(start.bp)) {
 					shortestPath.add(start);
 					break;
 				}
@@ -477,15 +442,16 @@ public class Dijkstra {
 		// 'shortestPath' ist.
 		Collections.reverse(shortestPath);
 
-		// Ausgabe der Knotenabfolge in der ArrayList 'shortestPath'
+		// Ausgabe der BpHelperabfolge in der ArrayList 'shortestPath'
 		for (BpHelper bpHelper : shortestPath) {
-			LOG.info("Der Weg führt über: " + bpHelper.bp.getAbkuerzung()
+			LOG.info("Der Weg fuehrt ueber: " + bpHelper.bp.getAbkuerzung()
 					+ ", " + bpHelper.bp.getBezeichnung());
 		}
 		endZeitShortestPath = System.nanoTime();
 		return shortestPath;
 	}
 
+	// Methode zur Berechung der Laufzeit und Aufbereitung der Ausgabe
 	public long getLaufzeit() {
 		laufZeitDijkstraWork = endZeitDijkstraWork - startZeitDijkstraWork;
 		laufZeitShortestPath = endZeitShortestPath - startZeitShortestPath;

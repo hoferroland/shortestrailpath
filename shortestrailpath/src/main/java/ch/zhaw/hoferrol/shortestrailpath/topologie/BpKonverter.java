@@ -35,11 +35,12 @@ public class BpKonverter {
 			hashBp.put(bpList.get(i).id_betriebspunkt, bpList.get(i));
 
 		}
-		LOG.info("Grösse der HashMap 'hashBp' beträgt: " + hashBp.size());
+		LOG.info("Groesse der HashMap 'hashBp' betraegt: " + hashBp.size());
 
 	}
 
 	// Getter-Methoden
+
 	public Map<Long, Betriebspunkt> getHashBp() {
 		return hashBp;
 	}

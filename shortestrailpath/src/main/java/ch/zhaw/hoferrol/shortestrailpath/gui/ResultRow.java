@@ -1,5 +1,13 @@
 package ch.zhaw.hoferrol.shortestrailpath.gui;
 
+/**
+ * Klasse ResultRow - Verwaltet Zeilen mit Informationen zu jeweils einem
+ * Betriebspunkt für die spätere Verwendung zur Anzeige im GUI (Tabelle)
+ * 
+ * @author Roland Hofer, V1.2 - 12.05.2014
+ * 
+ */
+
 class ResultRow {
 
 	private long id_bp;
@@ -17,6 +25,7 @@ class ResultRow {
 	private long distToNext;
 	private String distToNext_s;
 
+	// Konstruktor
 	public ResultRow(long id_bp, String bp_name, String bp_abk, int bp_typ,
 			String bp_typkurz, String bp_typlang, float xKoo, float yKoo,
 			long distToNext) {
@@ -36,6 +45,7 @@ class ResultRow {
 		this.distToNext_s = String.valueOf(distToNext);
 	}
 
+	// Getter und Setter
 	public long getId() {
 		return id_bp;
 	}

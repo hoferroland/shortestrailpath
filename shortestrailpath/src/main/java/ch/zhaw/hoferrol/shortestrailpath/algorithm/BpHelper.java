@@ -27,7 +27,7 @@ import ch.zhaw.hoferrol.shortestrailpath.topologie.NeighbourCalculator;
  * A*-Algorithmus benötigt.
  * 
  * 
- * @author Roland Hofer, V1.0 - 18.04.2014
+ * @author Roland Hofer, V1.2 - 12.05.2014
  * 
  */
 
@@ -56,6 +56,7 @@ public class BpHelper {
 		return bpHelper;
 	}
 
+	// Setze Typ des Betriebspunktes für Tabelle in MainFrame
 	public void setBpTypKurz(String bpTypKurz) {
 		this.bpTypKurz = bpTypKurz;
 	}
@@ -64,6 +65,7 @@ public class BpHelper {
 		return bpTypKurz;
 	}
 
+	// Setze Typ des Betriebspunktes für Tooltip in Mainframe
 	public void setBpTypLang(String bpTypLang) {
 		this.bpTypLang = bpTypLang;
 	}
@@ -163,6 +165,8 @@ public class BpHelper {
 			Object key = it.next();
 			Betriebspunkt bp = (Betriebspunkt) bpMap.get(key);
 			// erstelle neuen BpHelper mit Betriebspunkt als Uebergabeparameter
+			// Vereinfachung zur Darstellung in JTable in MainFrame, Zuweisung
+			// des BpTypKurz und BpTypLang
 			BpHelper h = new BpHelper(bp);
 			int typBp = bp.getBetriebspunkt_typ();
 			if ((typBp == 0) || (typBp == 2) || (typBp == 4)) {

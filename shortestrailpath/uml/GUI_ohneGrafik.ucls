@@ -56,7 +56,7 @@
     project="shortestrailpath" 
     file="/shortestrailpath/src/main/java/ch/zhaw/hoferrol/shortestrailpath/gui/TableColumnAdjuster.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="321" y="1573"/>    
+    <position height="-1" width="-1" x="68" y="1282"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -78,56 +78,14 @@
     project="shortestrailpath" 
     file="/shortestrailpath/src/main/java/ch/zhaw/hoferrol/shortestrailpath/gui/TableColumnAdjuster.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="555" y="1573"/>    
+    <position height="-1" width="-1" x="233" y="1422"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="9" language="java" name="ch.zhaw.hoferrol.shortestrailpath.gui.GrafikViewHandler" 
-    project="shortestrailpath" 
-    file="/shortestrailpath/src/main/java/ch/zhaw/hoferrol/shortestrailpath/gui/GrafikViewHandler.java" binary="false" 
-    corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1254" y="222"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
-      visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <class id="10" language="java" name="ch.zhaw.hoferrol.shortestrailpath.gui.GrafikView" project="shortestrailpath" 
-    file="/shortestrailpath/src/main/java/ch/zhaw/hoferrol/shortestrailpath/gui/GrafikView.java" binary="false" 
-    corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1236" y="651"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
-      visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <class id="11" language="java" name="ch.zhaw.hoferrol.shortestrailpath.gui.GrafikView.GPanel" 
-    project="shortestrailpath" 
-    file="/shortestrailpath/src/main/java/ch/zhaw/hoferrol/shortestrailpath/gui/GrafikView.java" binary="false" 
-    corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1155" y="961"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
-      visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <class id="12" language="java" name="ch.zhaw.hoferrol.shortestrailpath.gui.LegendView" project="shortestrailpath" 
-    file="/shortestrailpath/src/main/java/ch/zhaw/hoferrol/shortestrailpath/gui/LegendView.java" binary="false" 
-    corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1170" y="1301"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
-      visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <class id="13" language="java" name="ch.zhaw.hoferrol.shortestrailpath.gui.InfoView" project="shortestrailpath" 
+  <class id="9" language="java" name="ch.zhaw.hoferrol.shortestrailpath.gui.InfoView" project="shortestrailpath" 
     file="/shortestrailpath/src/main/java/ch/zhaw/hoferrol/shortestrailpath/gui/InfoView.java" binary="false" 
     corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="901" y="1198"/>    
@@ -137,26 +95,40 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <realization id="14">    
-    <end type="SOURCE" refId="2"/>    
-    <end type="TARGET" refId="1"/>  
-  </realization>  
-  <association id="15">    
+  <association id="10">    
     <end type="SOURCE" refId="2" navigable="false">      
-      <attribute id="16" name="bpResultRows"/>      
-      <multiplicity id="17" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="5" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="18">    
-    <end type="SOURCE" refId="2" navigable="false">      
-      <attribute id="19" name="bhfRows"/>      
-      <multiplicity id="20" minimum="0" maximum="2147483647"/>    
+      <attribute id="11" name="bhfRows"/>      
+      <multiplicity id="12" minimum="0" maximum="2147483647"/>    
     </end>    
     <end type="TARGET" refId="4" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
+  <association id="13">    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="14" name="bpResultRows"/>      
+      <multiplicity id="15" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="5" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="16">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="1"/>  
+  </realization>  
+  <association id="17">    
+    <bendpoint x="684" y="598"/>    
+    <bendpoint x="310" y="633"/>    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="18" name="bpResultRows"/>      
+      <multiplicity id="19" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="5" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <nesting id="20">    
+    <end type="SOURCE" refId="7"/>    
+    <end type="TARGET" refId="8"/>  
+  </nesting>  
   <association id="21">    
     <bendpoint x="686" y="709"/>    
     <bendpoint x="627" y="738"/>    
@@ -169,43 +141,25 @@
     <end type="TARGET" refId="4" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <nesting id="24">    
-    <end type="SOURCE" refId="7"/>    
-    <end type="TARGET" refId="6"/>  
-  </nesting>  
-  <nesting id="25">    
-    <end type="SOURCE" refId="7"/>    
-    <end type="TARGET" refId="8"/>  
-  </nesting>  
-  <association id="26">    
-    <bendpoint x="686" y="678"/>    
+  <association id="24">    
+    <bendpoint x="685" y="748"/>    
+    <bendpoint x="548" y="807"/>    
     <end type="SOURCE" refId="3" navigable="false">      
-      <attribute id="27" name="bhfRows"/>      
-      <multiplicity id="28" minimum="0" maximum="2147483647"/>    
+      <attribute id="25" name="startRow"/>      
+      <multiplicity id="26" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="4" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="29">    
-    <bendpoint x="684" y="598"/>    
-    <bendpoint x="310" y="633"/>    
-    <end type="SOURCE" refId="3" navigable="false">      
-      <attribute id="30" name="bpResultRows"/>      
-      <multiplicity id="31" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="5" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <nesting id="32">    
-    <end type="SOURCE" refId="10"/>    
-    <end type="TARGET" refId="11"/>  
+  <nesting id="27">    
+    <end type="SOURCE" refId="7"/>    
+    <end type="TARGET" refId="6"/>  
   </nesting>  
-  <association id="33">    
-    <bendpoint x="685" y="748"/>    
-    <bendpoint x="548" y="807"/>    
+  <association id="28">    
+    <bendpoint x="686" y="678"/>    
     <end type="SOURCE" refId="3" navigable="false">      
-      <attribute id="34" name="startRow"/>      
-      <multiplicity id="35" minimum="0" maximum="1"/>    
+      <attribute id="29" name="bhfRows"/>      
+      <multiplicity id="30" minimum="0" maximum="2147483647"/>    
     </end>    
     <end type="TARGET" refId="4" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  

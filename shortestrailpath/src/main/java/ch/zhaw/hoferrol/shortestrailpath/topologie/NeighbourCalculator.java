@@ -152,11 +152,11 @@ public class NeighbourCalculator {
 	// Methode welche Distanz zwischen zwei Betriebspunkten liefert
 	// Parameter id_BetriebspunktVon und id_BetriebspunktNach
 	public static Long getDistanz(long vonBpId, long nachBpId) {
-		// TODO null checks...
+
 		Map<Long, Long> distanzMap = distanzMapUeber.get(vonBpId);
 		if (distanzMap == null) {
-			System.out.println("Distanz zwischen: " + vonBpId + " und "
-					+ nachBpId + " beträgt null!");
+			LOG.info("Distanz zwischen: " + vonBpId + " und " + nachBpId
+					+ " beträgt null!");
 			return 0L;
 		}
 		return distanzMap.get(nachBpId);

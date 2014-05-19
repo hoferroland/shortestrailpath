@@ -37,7 +37,7 @@ public class BpVerbKonverter {
 			hashBpVerb
 					.put(bpVerbList.get(i).id_bpVerbindung, bpVerbList.get(i));
 		}
-		LOG.info("Grösse der HashMap 'hashBpVerb' beträgt: "
+		LOG.info("Groesse der HashMap 'hashBpVerb' betraegt: "
 				+ hashBpVerb.size());
 
 	}

@@ -11,15 +11,18 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+/**
+ * Klasse LegendView - Ist zuständig für die Anzeige der Legende -
+ * aufgerufengrafische Anzeige des aus der 'GrafikView'. Hier werden die Symbole
+ * der CH-Karte erklärt.
+ * 
+ * @author Roland Hofer, V1.1 - 11.05.2014
+ * 
+ */
+
 public class LegendView extends JFrame implements ActionListener {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -7560220635817212974L;
-	/**
-	 * 
-	 */
 
 	private JFrame legendframe;
 	private JPanel legendpanel;
@@ -46,11 +49,9 @@ public class LegendView extends JFrame implements ActionListener {
 		legendframe = this;
 		legendframe.setTitle("Legende zur grafischen Ausgabe");
 		legendframe.setSize(320, 240);
-		// legendframe.setLocation(200, 150);
 		legendframe
 				.setDefaultCloseOperation(javax.swing.JFrame.DISPOSE_ON_CLOSE);
 		createLegendFrame();
-		// this.setVisible(true);
 
 	}
 
