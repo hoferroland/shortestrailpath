@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: shortestrailpath
-SplashScreen-Image: SplashScreen-Entwurf.png
+SplashScreen-Image: SplashScreen-ShortestRailPath_V1-0-0.png
 Bundle-SymbolicName: shortestrailpath
 Bundle-Version: 1.0.0.qualifier
 Bundle-ClassPath: shortestrailpath.jar,
