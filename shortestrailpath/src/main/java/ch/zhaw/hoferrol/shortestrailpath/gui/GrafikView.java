@@ -36,9 +36,6 @@ import ch.zhaw.hoferrol.shortestrailpath.topologie.BorderPoint;
 
 public class GrafikView extends JFrame implements ActionListener {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 4657107180500861400L;
 	// Variabeln
 	private static final Logger LOG = Logger.getLogger(GrafikView.class);
@@ -46,7 +43,6 @@ public class GrafikView extends JFrame implements ActionListener {
 	private JPanel drawPanel;
 	private JButton legendeButton;
 	private JButton schliessenButton;
-	// private Graphics karte;
 	private int[] grafikSize = new int[4];
 	private List<BpHelper> shortestPath = new ArrayList<BpHelper>();
 	private List<BpHelper> greenBpList = new ArrayList<BpHelper>();
@@ -136,7 +132,6 @@ public class GrafikView extends JFrame implements ActionListener {
 			try {
 				start = ImageIO.read(urlStart);
 			} catch (IOException eStart) {
-				// Auto-generated catch block
 				eStart.printStackTrace();
 			}
 
@@ -147,14 +142,13 @@ public class GrafikView extends JFrame implements ActionListener {
 			try {
 				ziel = ImageIO.read(urlZiel);
 			} catch (IOException eZiel) {
-				// Auto-generated catch block
 				eZiel.printStackTrace();
 			}
 
 			// Hintergrundfarbe für die Bilder 'start' und 'ziel' transparent
 			Color bgc = new Color(0f, 0f, 0f, .01f);
 
-			// Schweizerkarte mit den Gemeindegrenzen zeichnen
+			// Variabel bpoint für Grenzpunkt
 			BorderPoint bpoint = null;
 
 			// Schlaufe für das Zeichnen der Schweizer-Karte
