@@ -17,9 +17,9 @@ package ch.zhaw.hoferrol.shortestrailpath.topologie;
  * betriebspunkt_typ: Dient der Differenzierung ob ein Betriebspunkt ein
  * Bahnhof, eine Haltestelle oder eine Abzweigung usw. ist.
  * 
- * TODO!! koo_x : X-Koordinaten des Betriebspunktes auf Basis von
+ * koo_x : X-Koordinaten des Betriebspunktes auf Basis von LV03
  * 
- * TODO!! koo_y : Y-Koordinaten des Betriebspunktes auf Basis von
+ * koo_y : Y-Koordinaten des Betriebspunktes auf Basis von LV03
  * 
  * uic : Ländercode. Ermöglicht Unterscheidung zwischen Betriebspunkten in der
  * Schweiz oder dem Ausland.

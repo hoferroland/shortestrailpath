@@ -1,5 +1,15 @@
 package ch.zhaw.hoferrol.shortestrailpath.topologie;
 
+/**
+ * Klasse NeighbourCalculator ermittelt die unmittelbaren Nachbarn
+ * pro Betriebspunkt, füllt diese in eine Liste ab und fügt diese liest das File CHBorders.txt und erstellt
+ * dem Betriebspunkt zu. Zudem wird eine Map mit den jeweiligen Distanzen aufgebaut sowie eine 
+ * Methode 'getDistanz' angeboten.
+ * 
+ * @author Roland Hofer, V1.4 - 05.05.2014
+ * 
+ */
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -76,11 +86,9 @@ public class NeighbourCalculator {
 
 			} else {
 				// Falls bereits eine Liste mit Nachfolge-Betriebspunkten für
-				// diesen
-				// Betriebspunkt besteht, wird diese Liste einer temporären
-				// Liste zugewiesen
-				// (tmpNeighbourVonList) und die einzelnen Betriebspunkte in
-				// einer neuen Liste
+				// diesen Betriebspunkt besteht, wird diese Liste einer
+				// temporären Liste zugewiesen (tmpNeighbourVonList) und die
+				// einzelnen Betriebspunkte in einer neuen Liste
 				// (tmpNeighbourVonBp) abgelegt.
 				List<Betriebspunkt> tmpNeighbourVonList = new ArrayList<Betriebspunkt>();
 				List<Betriebspunkt> tmpNeighbourVonBp = new ArrayList<Betriebspunkt>();

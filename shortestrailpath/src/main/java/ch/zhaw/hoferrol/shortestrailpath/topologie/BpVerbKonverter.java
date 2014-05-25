@@ -14,7 +14,7 @@ import org.apache.log4j.Logger;
  * Betriebspunktverbindung.
  * 
  * 
- * @author Roland Hofer, V1.0 - 20.04.2014
+ * @author Roland Hofer, V1.2 - 28.04.2014
  * 
  */
 

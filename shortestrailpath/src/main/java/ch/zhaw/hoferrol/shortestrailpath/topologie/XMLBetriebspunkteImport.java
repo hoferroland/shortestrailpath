@@ -1,5 +1,16 @@
 package ch.zhaw.hoferrol.shortestrailpath.topologie;
 
+/**
+ * Klasse XMLBetriebspunkteImport liest das File betriebspunkte.xml bzw.
+ * betriebspunkte_internal.xml (wird mit url aus Main-Klasse übergeben).
+ * Das File wird durchiteriert und jede Spalte ausgelesen. 
+ * Anschliessend wird für jedes Kind-Element ein neuer Betriebspunkt
+ * angelegt. Alle Betriebspunkte werden in eine Liste aufgenommen.
+ * 
+ * @author Roland Hofer, V1.2 - 21.04.2014
+ * 
+ */
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -54,11 +65,13 @@ public class XMLBetriebspunkteImport {
 			int uic = 80;
 			for (i = 0; i < alleKinder.size(); i++) {
 				Element kind2 = ((Element) alleKinder.get(i));
+
 				List<Element> columns1 = kind2.getChildren();
 				for (Element col : columns1) {
 					LOG.debug(col.getAttributeValue("NAME") + ": "
 							+ col.getValue());
 				}
+
 				String abkuerzung = columns1.get(2).getText();
 				String name = columns1.get(3).getText();
 				if ((columns1.get(1).getText()) != "") {

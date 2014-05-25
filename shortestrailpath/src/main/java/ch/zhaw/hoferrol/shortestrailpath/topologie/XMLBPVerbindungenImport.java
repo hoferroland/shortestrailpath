@@ -1,5 +1,16 @@
 package ch.zhaw.hoferrol.shortestrailpath.topologie;
 
+/**
+ * Klasse XMLBPVerbindungenImport liest das File betriebspunktverbindungen.xml bzw.
+ * betriebspunktverbindungen_internal.xml (wird mit url aus Main-Klasse übergeben).
+ * Das File wird durchiteriert und jede Spalte ausgelesen. 
+ * Anschliessend wird für jedes Kind-Element eine neue BetriebspunktVerbindung
+ * angelegt. Alle BetriebspunktVerbindungen werden in eine Liste aufgenommen.
+ * 
+ * @author Roland Hofer, V1.3 - 28.04.2014
+ * 
+ */
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -52,24 +63,27 @@ public class XMLBPVerbindungenImport {
 			int i;
 			for (i = 0; i < alleKinder.size(); i++) {
 				Element kind2 = ((Element) alleKinder.get(i));
+
 				List<Element> columns2 = kind2.getChildren();
 				for (Element col2 : columns2) {
 					LOG.debug(col2.getAttributeValue("NAME") + ": "
 							+ col2.getValue());
 				}
 				Long bpVon = Long.valueOf(columns2.get(1).getText());
-				Long bpBis = Long.valueOf(columns2.get(2).getText());
 				Betriebspunkt bpStart = hashBp.get(bpVon);
+
+				Long bpBis = Long.valueOf(columns2.get(2).getText());
 				Betriebspunkt bpZiel = hashBp.get(bpBis);
+
 				Long distanz = Long.valueOf(columns2.get(3).getText());
+
 				int anzGl = Integer.parseInt(columns2.get(4).getText());
+
 				Long id = Long.valueOf(columns2.get(0).getText());
 
 				BetriebspunktVerbindungen bpVerb = new BetriebspunktVerbindungen(
 						id, bpVon, bpBis, distanz, anzGl, bpStart, bpZiel);
-				// Konsolenausgbe zu Debugzwecken
-				// System.out.println(id + ", " + bpVon + ", " + bpBis + ", "
-				// + distanz + ", " + anzGl);
+
 				bpVerbList.add(bpVerb);
 
 				//

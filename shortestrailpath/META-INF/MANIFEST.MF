@@ -13,10 +13,8 @@ Bundle-ClassPath: shortestrailpath.jar,
  Roli/Desktop/Tmp/lib/jaxen-1.1.6.jar,
  Roli/Desktop/Tmp/lib/xercesImpl.jar,
  Roli/Desktop/Tmp/lib/xml-apis.jar
-Export-Package: application,
- ch.zhaw.hoferrol.shortestrailpath.algorithm,
+Export-Package: ch.zhaw.hoferrol.shortestrailpath.algorithm,
  ch.zhaw.hoferrol.shortestrailpath.gui,
  ch.zhaw.hoferrol.shortestrailpath.main,
- ch.zhaw.hoferrol.shortestrailpath.topologie,
- topoTest
+ ch.zhaw.hoferrol.shortestrailpath.topologie
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
