@@ -19,9 +19,10 @@ import ch.zhaw.hoferrol.shortestrailpath.topologie.NeighbourCalculator;
  * Klasse Dijkstra - Logikteil der Applikation, berechnet den kürzesten Weg
  * zwischen zwei übergebenen Betriebspunkten. Mit dem übergebenen Modus wird die
  * Wahl der Berechnungsvariaten (Dijkstra-classic, Dijkstra-optimiert oder A*)
- * defininiert.
+ * defininiert. Die Implementierung entspricht genau dem beschriebenen Ablauf in
+ * der Dokumentation Kapitel 6.1
  * 
- * @author Roland Hofer, V1.8 - 08.05.2014
+ * @author Roland Hofer, V1.9 - 24.05.2014
  */
 
 public class Dijkstra {
@@ -71,8 +72,6 @@ public class Dijkstra {
 		yellowBpList = new ArrayList<BpHelper>();
 		greenBpList = new ArrayList<BpHelper>();
 
-		// shortestBpList = new ArrayList<BpHelper>();
-		// shortestBpVerbList = new HashSet<BetriebspunktVerbindungen>();
 		// Instanzierung ASternHeuristikHelper
 		aSternHeuristikHelper = new ASternHeuristikHelper(bpHelperMap);
 
@@ -179,7 +178,6 @@ public class Dijkstra {
 	// - BpHelper welcher als Startpunkt übergeben wird
 	// - BpHelper welcher als Zielpunkt übergeben wird
 	// - HashMap mit allen BpHelpern (key = id_BpHelper = id_Betriebspunkt)
-
 	public List<BpHelper> work(BpHelper bpHelperStart, BpHelper zielHelper,
 			int modus, Map<Long, BpHelper> allBpMap) {
 
@@ -277,9 +275,8 @@ public class Dijkstra {
 
 				// Falls die neu berechnete Distanz (tmpDistanz) kleiner ist
 				// als die nachbarBpHelper-Distanz, setze die neue Distanz und
-				// den
-				// Vorgänger beim 'nachbarBpHelper' ein und nehme den
-				// wechsle ihn auf gelb
+				// den Vorgänger beim 'nachbarBpHelper' ein und nehme den
+				// BpHelper in die yellowBpList auf.
 				if (tmpDistanz <= nachbarBpHelper.getDistanzZumStart()) {
 					nachbarBpHelper.setDistanzZumStart(tmpDistanz);
 					nachbarBpHelper.setBpVorher(aktuellerBP.bp);
@@ -322,8 +319,7 @@ public class Dijkstra {
 		}
 
 		// Alle grünen BpHelper auf Konsole ausgeben (sollten immer alle
-		// BpHelper
-		// sein nach Durchlaufen von Dijkstra.
+		// BpHelper sein nach Durchlaufen von Dijkstra.
 		// Falls keine grünen Punte, 'leer' ausgeben
 		LOG.debug("Grüne Betriebspunkte");
 		if (greenBpList.size() == 0) {
@@ -388,8 +384,7 @@ public class Dijkstra {
 				// (Abfangen Fall, falls Bp im ohne Bp-Verbindung in Topologie
 				// wäre)
 				allBpMap.remove(helper);
-				// (Test und Debug) Ausgabe von gelöschten BpHelpern auf der
-				// Konsole
+				// Ausgabe von gelöschten BpHelpern auf der Konsole
 				LOG.debug("BpHelper ohne Nachbar: " + helper.bp.getAbkuerzung()
 						+ " wurde geloescht");
 			}
@@ -457,5 +452,9 @@ public class Dijkstra {
 		laufZeitShortestPath = endZeitShortestPath - startZeitShortestPath;
 		laufZeitAlgorithmus = laufZeitDijkstraWork + laufZeitShortestPath;
 		return laufZeitAlgorithmus;
+	}
+
+	protected List<BpHelper> getRedList() {
+		return redBpList;
 	}
 }

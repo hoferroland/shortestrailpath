@@ -15,7 +15,7 @@
   <class id="2" language="java" name="ch.zhaw.hoferrol.shortestrailpath.gui.GuiMainHandler" project="shortestrailpath" 
     file="/shortestrailpath/src/main/java/ch/zhaw/hoferrol/shortestrailpath/gui/GuiMainHandler.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="313" y="385"/>    
+    <position height="-1" width="-1" x="320" y="358"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -97,69 +97,59 @@
   </class>  
   <association id="10">    
     <end type="SOURCE" refId="2" navigable="false">      
-      <attribute id="11" name="bhfRows"/>      
+      <attribute id="11" name="bpResultRows"/>      
       <multiplicity id="12" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="5" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <nesting id="13">    
+    <end type="SOURCE" refId="7"/>    
+    <end type="TARGET" refId="6"/>  
+  </nesting>  
+  <association id="14">    
+    <bendpoint x="686" y="678"/>    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="15" name="bhfRows"/>      
+      <multiplicity id="16" minimum="0" maximum="2147483647"/>    
     </end>    
     <end type="TARGET" refId="4" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="13">    
-    <end type="SOURCE" refId="2" navigable="false">      
-      <attribute id="14" name="bpResultRows"/>      
-      <multiplicity id="15" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="5" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <realization id="16">    
-    <end type="SOURCE" refId="2"/>    
-    <end type="TARGET" refId="1"/>  
-  </realization>  
   <association id="17">    
-    <bendpoint x="684" y="598"/>    
-    <bendpoint x="310" y="633"/>    
-    <end type="SOURCE" refId="3" navigable="false">      
-      <attribute id="18" name="bpResultRows"/>      
-      <multiplicity id="19" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="5" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <nesting id="20">    
-    <end type="SOURCE" refId="7"/>    
-    <end type="TARGET" refId="8"/>  
-  </nesting>  
-  <association id="21">    
     <bendpoint x="686" y="709"/>    
     <bendpoint x="627" y="738"/>    
     <bendpoint x="566" y="770"/>    
     <bendpoint x="552" y="781"/>    
     <end type="SOURCE" refId="3" navigable="false">      
-      <attribute id="22" name="zielRow"/>      
-      <multiplicity id="23" minimum="0" maximum="1"/>    
+      <attribute id="18" name="zielRow"/>      
+      <multiplicity id="19" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="4" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="24">    
+  <association id="20">    
     <bendpoint x="685" y="748"/>    
     <bendpoint x="548" y="807"/>    
     <end type="SOURCE" refId="3" navigable="false">      
-      <attribute id="25" name="startRow"/>      
-      <multiplicity id="26" minimum="0" maximum="1"/>    
+      <attribute id="21" name="startRow"/>      
+      <multiplicity id="22" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="4" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <nesting id="27">    
+  <nesting id="23">    
     <end type="SOURCE" refId="7"/>    
-    <end type="TARGET" refId="6"/>  
+    <end type="TARGET" refId="8"/>  
   </nesting>  
-  <association id="28">    
-    <bendpoint x="686" y="678"/>    
-    <end type="SOURCE" refId="3" navigable="false">      
-      <attribute id="29" name="bhfRows"/>      
-      <multiplicity id="30" minimum="0" maximum="2147483647"/>    
+  <realization id="24">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="1"/>  
+  </realization>  
+  <association id="25">    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="26" name="bhfRows"/>      
+      <multiplicity id="27" minimum="0" maximum="2147483647"/>    
     </end>    
     <end type="TARGET" refId="4" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
