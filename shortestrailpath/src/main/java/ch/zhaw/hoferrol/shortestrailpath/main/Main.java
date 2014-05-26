@@ -22,6 +22,14 @@ import ch.zhaw.hoferrol.shortestrailpath.topologie.CHBordersImport;
 import ch.zhaw.hoferrol.shortestrailpath.topologie.XMLBPVerbindungenImport;
 import ch.zhaw.hoferrol.shortestrailpath.topologie.XMLBetriebspunkteImport;
 
+/**
+ * Klasse Main - Startklasse von ShortestRailPath. Initialisiert
+ * Topologie-Import und ruft via Interface IGuiMainHandler das GUI auf.
+ * 
+ * @author Roland Hofer, V1.4 - 25.05.2014
+ * 
+ */
+
 public class Main {
 
 	private static final Logger LOG = Logger.getLogger(Main.class);
@@ -42,6 +50,7 @@ public class Main {
 
 	public static void main(String[] args) {
 
+		// Betriebspunkte-Import wird initiiert
 		URL bpImportUrl = getBpImportUrl();
 		XMLBetriebspunkteImport xmlBpImp = new XMLBetriebspunkteImport(
 				bpImportUrl);
@@ -51,6 +60,7 @@ public class Main {
 		bpKonv.convertBP(bpList);
 		hashBp = bpKonv.getHashBp();
 
+		// BetriebspunkteVerbindungen-Import wird initiiert
 		URL bpVerbImportUrl = getBpVerbImportUrl();
 		XMLBPVerbindungenImport xmlBpVerbImp = new XMLBPVerbindungenImport(
 				bpVerbImportUrl);
@@ -59,43 +69,38 @@ public class Main {
 		bpVerbKonv.convertBpVerb(bpVerbList);
 		hashBpVerb = bpVerbKonv.getHashBpVerb();
 
+		// Grenzpunkte-Import wird initiiert
 		CHBordersImport borderImport = new CHBordersImport(CHBORDER_FILE_NAME);
 		border = borderImport.importBorders();
 		LOG.debug("Grösse Border-Liste in Main beträgt: " + border.size());
 
-		// Dijkstra
-		BpHelper.buildHelperMap(hashBp, hashBpVerb);
-
+		// BpHelper werden angelegt
 		helperMap = BpHelper.buildHelperMap(hashBp, hashBpVerb);
 
-		// GUI-Aufruf
+		// Initiieren des GUI
 		IGuiMainHandler guiMainHandler = new GuiMainHandler(hashBp, hashBpVerb,
 				helperMap, border);
 
-		// Dijkstra dijkstra = new Dijkstra(helperMap);
-
-		// Durchführung des Tests A = Startknoten
-
-		// BpHelper startHelper = helperMap.get(167L); // Murgenthal
-		// BpHelper startHelper = helperMap.get(171L); // Niederbipp
-
-		// BpHelper startHelper = helperMap.get(1124L); // Genève
-		// BpHelper startHelper = helperMap.get(182L); // Olten
-		// BpHelper zielHelper = helperMap.get(182L); // Olten
-		// BpHelper zielHelper = helperMap.get(392L); // Lausanne
-		// BpHelper zielHelper = helperMap.get(573L); // Aarwangen
-
-		// BpHelper zielHelper = helperMap.get(241L); // Trimbach
-		// BpHelper zielHelper = helperMap.get(406L); // Winti
-
-		// dijkstra.work(hashBpVerb, startHelper, zielHelper, 1, helperMap);
-
-		// dijkstra.work(hashBpVerb, startHelper, zielHelper, 1,
-		// BpHelper.buildHelperList(hashBp, hashBpVerb));
-		// Ausgabe des kürzesten Weges zwischen Olten (id_bp 182) und
-		// Winterthur (id_bp 406)
-		// shortestPath = dijkstra.getShortestPath(startHelper, zielHelper);
-		// guiMainHandler.getResult(shortestPath);
+		// // Auskommentierte Aufrufe für Debugging ohne GUI
+		//
+		// // Dijkstra dijkstra = new Dijkstra(helperMap);
+		//
+		// // Durchführung des Tests A = Startknoten
+		//
+		// // BpHelper startHelper = helperMap.get(167L); // Murgenthal
+		// // BpHelper startHelper = helperMap.get(171L); // Niederbipp
+		// // BpHelper startHelper = helperMap.get(1124L); // Genève
+		// // BpHelper startHelper = helperMap.get(182L); // Olten
+		// // BpHelper zielHelper = helperMap.get(182L); // Olten
+		// // BpHelper zielHelper = helperMap.get(392L); // Lausanne
+		// // BpHelper zielHelper = helperMap.get(573L); // Aarwangen
+		// // BpHelper zielHelper = helperMap.get(241L); // Trimbach
+		// // BpHelper zielHelper = helperMap.get(406L); // Winti
+		//
+		// // dijkstra.work(hashBpVerb, startHelper, zielHelper, 1, helperMap);
+		//
+		// // BpHelper.buildHelperList(hashBp, hashBpVerb));
+		// // shortestPath = dijkstra.getShortestPath(startHelper, zielHelper);
 
 	}
 

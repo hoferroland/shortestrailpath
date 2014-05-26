@@ -10,13 +10,13 @@
   </appender> 
   
   <logger name="ch.zhaw.hoferrol.shortestrailpath.main">
-  	<level value="debug"/>
+  	<level value="info"/>
   </logger>
   <logger name="ch.zhaw.hoferrol.shortestrailpath.topologie">
   	<level value="info"/>
   </logger>
   <logger name="ch.zhaw.hoferrol.shortestrailpath.algorithm">
-  	<level value="debug"/>
+  	<level value="info"/>
   </logger>
   <logger name="ch.zhaw.hoferrol.shortestrailpath.gui">
   	<level value="info"/>
